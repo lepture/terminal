@@ -44,7 +44,8 @@ Colorful and nested logging support::
     logging.error('This is a demo for error')
     logging.end('End Program')
 
-.. image: assets/logging.png
+.. image:: assets/logging.png
+    :alt: logging
 
 Progress bar support::
 
