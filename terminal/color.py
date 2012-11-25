@@ -5,7 +5,7 @@ import sys
 codes = {}
 
 
-def is_color_support():
+def is_color_supported():
     "Find out if your terminal environment supports color."
     # shinx.util.console
     if not hasattr(sys.stdout, 'isatty'):
@@ -19,7 +19,7 @@ def is_color_support():
 
 
 def colorize(name, text):
-    if not is_color_support():
+    if not is_color_supported():
         return text
     code = codes.get(name, None)
     if not code:
