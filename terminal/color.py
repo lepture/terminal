@@ -35,6 +35,9 @@ class Color(object):
     def __len__(self):
         return len(self.text)
 
+    def __add__(self, s):
+        return str(self) + s
+
 
 def colorize(name, text):
     if not is_color_supported():
