@@ -2,6 +2,7 @@
 
 from .color import *
 from .logger import Logger
+from .progress import Progress
 
 
 logging = Logger(
@@ -12,4 +13,5 @@ logging = Logger(
         'error': red,
     },
     icon=cyan('|_'),
+    progress_func=Progress(marker='-', right='>')
 )

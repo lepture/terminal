@@ -29,6 +29,9 @@ class Color(object):
             return self.text
         return '%s%s%s' % (code[0], self.text, code[1])
 
+    def __repr__(self):
+        return repr(unicode(self))
+
     def __len__(self):
         return len(self.text)
 

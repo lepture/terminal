@@ -5,8 +5,8 @@ import logging
 
 
 class Logger(object):
-    def __init__(self, name=None, level='notset',
-                 level_colors=None, icon='|_'):
+    def __init__(self, name=None, level='notset', level_colors=None,
+                 icon='|_', progress_func=None):
         self._depth = 0
         self._icon = icon
 
@@ -17,30 +17,7 @@ class Logger(object):
         self._logger.addHandler(channel)
 
         self._level_colors = level_colors or {}
-
-    def set_level(self, level):
-        self._logger.setLevel(getattr(logging, level.upper()))
-
-    def start(self, *args):
-        if args:
-            text = '%s%s' % (self._depth * ' ', ' '.join(args))
-            sys.stdout.write(text)
-            sys.stdout.write('\n')
-            sys.stdout.flush()
-
-        self._depth += 1
-
-    def end(self, *args):
-        if self._depth == 0:
-            #TODO exception
-            raise Exception('')
-        if not args:
-            return
-        self._depth -= 1
-        text = '%s%s' % (self._depth * ' ', ' '.join(args))
-        sys.stdout.write(text)
-        sys.stdout.write('\n')
-        sys.stdout.flush()
+        self._progress_func = progress_func
 
     @property
     def icon(self):
@@ -48,14 +25,28 @@ class Logger(object):
             return ''
         return '%s%s ' % (' ' * self._depth, self._icon)
 
-    def _colorize(self, name, *args):
-        if not args:
-            return ''
-        text = ' '.join(args)
-        func = self._level_colors.get(name)
-        if not func:
-            return text
-        return func(text)
+    def set_level(self, level):
+        self._logger.setLevel(getattr(logging, level.upper()))
+
+    def set_progress_func(self, func):
+        self._progress_func = func
+
+    def start(self, *args):
+        if args:
+            text = '%s%s' % (self._depth * ' ', ' '.join(args))
+            self.emit(text)
+
+        self._depth += 1
+
+    def end(self, *args):
+        if self._depth == 0:
+            #TODO exception
+            raise Exception('')
+        if args:
+            text = '%s%s' % (self._depth * ' ', ' '.join(args))
+            self.emit(text)
+
+        self._depth -= 1
 
     def debug(self, *args):
         text = '%s%s' % (self.icon, self._colorize('debug', *args))
@@ -72,6 +63,36 @@ class Logger(object):
     def error(self, *args):
         text = '%s%s' % (self.icon, self._colorize('error', *args))
         self._logger.error(text)
+
+    def emit(self, text, newline=True):
+        if newline:
+            sys.stdout.write(text + '\n')
+        else:
+            sys.stdout.write(text + '\r')
+        sys.stdout.flush()
+
+    def progress(self, current, total, end=False):
+        status = '%s/%s' % (current, total)
+        if self._progress_func:
+            text = self._progress_func(
+                current, total,
+                blank=' ' * self._depth,
+                status=' %s' % status)
+        else:
+            text = status
+        if current < total and not end:
+            self.emit(text, newline=False)
+        else:
+            self.emit(text, newline=True)
+
+    def _colorize(self, name, *args):
+        if not args:
+            return ''
+        text = ' '.join(args)
+        func = self._level_colors.get(name)
+        if not func:
+            return text
+        return func(text)
 
 
 class _LogFormatter(logging.Formatter):
