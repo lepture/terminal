@@ -19,30 +19,36 @@ def is_color_supported():
 
 
 class Color(object):
-    def __init__(self, name, text):
-        self.name = name
-        self.text = text
+    def __init__(self, *items):
+        self.items = items
+        self.name = 'plain'
 
     def __str__(self):
         code = codes.get(self.name, None)
+        text = ''.join((unicode(item) for item in self.items))
         if not code:
-            return self.text
-        return '%s%s%s' % (code[0], self.text, code[1])
+            return text
+        return '%s%s%s' % (code[0], text, code[1])
 
     def __repr__(self):
         return repr(unicode(self))
 
     def __len__(self):
-        return len(self.text)
+        return sum([len(item) for item in self.items])
 
     def __add__(self, s):
-        return str(self) + s
+        if not isinstance(s, (basestring, Color)):
+            msg = "Concatenatation failed: %r + %r (Not a ColorString or str)"
+            raise TypeError(msg % (type(s), type(self)))
+        return Color(self, s)
 
 
 def colorize(name, text):
     if not is_color_supported():
         return text
-    return Color(name, text)
+    c = Color(text)
+    c.name = name
+    return c
 
 
 def create_color_func(name):
