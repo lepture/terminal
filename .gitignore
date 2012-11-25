@@ -1,0 +1,17 @@
+*.pyc
+*.pyo
+*.egg-info
+__pycache__
+bin
+build
+develop-eggs
+dist
+eggs
+parts
+.DS_Store
+.installed.cfg
+deploy
+content
+debug.py
+docs/_build
+.tox
