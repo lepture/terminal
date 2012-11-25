@@ -18,13 +18,25 @@ def is_color_supported():
     return term in ('xterm', 'linux') or 'color' in term
 
 
+class Color(object):
+    def __init__(self, name, text):
+        self.name = name
+        self.text = text
+
+    def __str__(self):
+        code = codes.get(self.name, None)
+        if not code:
+            return self.text
+        return '%s%s%s' % (code[0], self.text, code[1])
+
+    def __len__(self):
+        return len(self.text)
+
+
 def colorize(name, text):
     if not is_color_supported():
         return text
-    code = codes.get(name, None)
-    if not code:
-        return text
-    return code[0] + text + code[1]
+    return Color(name, text)
 
 
 def create_color_func(name):
