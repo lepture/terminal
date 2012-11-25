@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
-import re
 
-_ansi_re = re.compile('\x1b\\[(\\d\\d;){0,2}\\d\\dm')
 codes = {}
 
 
@@ -23,7 +21,10 @@ def is_color_support():
 def colorize(name, text):
     if not is_color_support():
         return text
-    return codes.get(name, '') + text + codes.get('reset', '')
+    code = codes.get(name, None)
+    if not code:
+        return text
+    return code[0] + text + code[1]
 
 
 def create_color_func(name):
@@ -31,32 +32,30 @@ def create_color_func(name):
         return colorize(name, text)
     globals()[name] = inner
 
-_attrs = {
-    'reset':     '39;49;00m',
-    'bold':      '01m',
-    'faint':     '02m',
-    'standout':  '03m',
-    'underline': '04m',
-    'blink':     '05m',
-}
 
-for _name, _value in _attrs.items():
-    codes[_name] = '\x1b[' + _value
+def _esc(*codes):
+    return "\x1b[%sm" % (";".join([str(c) for c in codes]))
+
+_styles = {
+    'bold': (1, 22),
+    'italic': (3, 23),
+    'underline': (4, 24),
+    'blink': (5, 25),
+    'flip': (7, 27),
+    'strike': (9, 29),
+}
+for _name in _styles:
+    _code = _styles[_name]
+    codes[_name] = (_esc(_code[0]), _esc(_code[1]))
+
 
 _colors = [
-    ('black',     'darkgray'),
-    ('darkred',   'red'),
-    ('darkgreen', 'green'),
-    ('brown',     'yellow'),
-    ('darkblue',  'blue'),
-    ('purple',    'fuchsia'),
-    ('turquoise', 'teal'),
-    ('lightgray', 'white'),
+    'black', 'red', 'green', 'yellow',
+    'blue', 'magenta', 'cyan', 'white'
 ]
 
-for i, (dark, light) in enumerate(_colors):
-    codes[dark] = '\x1b[%im' % (i + 30)
-    codes[light] = '\x1b[%i;01m' % (i + 30)
+for i, _name in enumerate(_colors):
+    codes[_name] = (_esc(i + 30), _esc(39))
 
 for _name in codes:
     create_color_func(_name)
