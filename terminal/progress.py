@@ -25,15 +25,13 @@ class Progress(object):
         self.left = left
         self.right = right
         if len(fill) == 0:
-            # TODO
-            raise
+            raise ValueError('You must fill something.')
         self.fill = fill
         self.width = get_terminal_width()
 
     def __call__(self, current, total, blank='', status=''):
         if current > total:
-            # TODO
-            raise
+            raise ValueError("current can't be larger than total.")
         marker = int(self.width / float(total)) * current * self.marker
         marker = self.left + marker + self.right
         count = len(blank) + len(status)

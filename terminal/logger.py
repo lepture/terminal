@@ -41,8 +41,7 @@ class Logger(object):
 
     def end(self, *args):
         if self._depth == 0:
-            #TODO exception
-            raise Exception('')
+            raise RuntimeError('There is no nested logging.')
         if args:
             text = '%s%s' % (self._depth * self._fill, ' '.join(args))
             self.emit(text)
