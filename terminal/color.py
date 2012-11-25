@@ -42,6 +42,12 @@ class Color(object):
             raise TypeError(msg % (type(s), type(self)))
         return Color(self, s)
 
+    def __radd__(self, s):
+        if not isinstance(s, (basestring, Color)):
+            msg = "Concatenatation failed: %r + %r (Not a ColorString or str)"
+            raise TypeError(msg % (type(s), type(self)))
+        return Color(s, self)
+
 
 def colorize(name, text):
     if not is_color_supported():

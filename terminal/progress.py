@@ -35,12 +35,12 @@ class Progress(object):
             # TODO
             raise
         marker = int(self.width / float(total)) * current * self.marker
-        marker = '%s%s%s' % (self.left, marker, self.right)
+        marker = self.left + marker + self.right
         count = len(blank) + len(status)
         if len(marker) >= self.width - count:
             split = self.width - count - len(self.right)
-            marker = '%s%s' % (marker[:split], self.right)
+            marker = marker[:split] + self.right
         to_fill = self.width - len(marker) - count
         fill = ((to_fill - 1) / len(self.fill) + 1) * self.fill
         fill = fill[:to_fill]
-        return '%s%s%s%s' % (blank, marker, fill, status)
+        return blank + marker + fill + status

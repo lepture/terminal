@@ -22,6 +22,6 @@ logging = Logger(
         'warn': yellow,
         'error': red,
     },
-    icon=cyan('|_'),
+    icon=cyan('|-'),
     progress_func=Progress(marker='-', right='>')
 )
