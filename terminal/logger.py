@@ -12,10 +12,8 @@ class Logger(object):
         self._fill = fill
 
         self._logger = logging.getLogger(name)
-        self._logger.setLevel(getattr(logging, level.upper()))
-        channel = logging.StreamHandler()
-        channel.setFormatter(_LogFormatter())
-        self._logger.addHandler(channel)
+        self.set_level(level)
+        self.setup_logger()
 
         self._level_colors = level_colors or {}
         self._progress_func = progress_func
@@ -25,6 +23,12 @@ class Logger(object):
         if not self._depth:
             return ''
         return self._fill * self._depth + self._icon
+
+    def setup_logger(self):
+        "Subclass can rewrite this function."
+        channel = logging.StreamHandler()
+        channel.setFormatter(_LogFormatter())
+        self._logger.addHandler(channel)
 
     def set_level(self, level):
         self._logger.setLevel(getattr(logging, level.upper()))
