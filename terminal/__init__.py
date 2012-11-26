@@ -16,7 +16,7 @@ __homepage__ = 'http://lab.lepture.com/terminal/'
 
 
 logging = Logger(
-    level_colors={
+    colors={
         'debug': lambda s: bold(black(s)),
         'info': green,
         'warn': yellow,
