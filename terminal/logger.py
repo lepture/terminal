@@ -7,14 +7,16 @@ import logging
 
 class Logger(object):
     def __init__(self, name=None, level='notset', icon='|_', fill='  ',
-                 progress=None, colors=None):
+                 progress=None, formatter=None):
         self._depth = 0
         self._icon = icon
         self._fill = fill
 
         self._logger = logging.getLogger(name)
         self.set_level(level)
-        self.format_logger(colors)
+        if formatter:
+            self.format_logger(formatter)
+
         if progress:
             self._progress = progress
         else:
@@ -26,10 +28,10 @@ class Logger(object):
             return ''
         return self._fill * self._depth + self._icon
 
-    def format_logger(self, colors=None):
+    def format_logger(self, formatter):
         "Subclass can rewrite this function."
         channel = logging.StreamHandler()
-        channel.setFormatter(NestFormater(self, colors))
+        channel.setFormatter(formatter)
         self._logger.addHandler(channel)
 
     def set_level(self, level):
