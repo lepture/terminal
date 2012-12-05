@@ -7,7 +7,6 @@ A terminal environment tools.
 
 from .color import *
 from .logger import Logger
-from .progress import Progress
 
 
 __author__ = 'Hsiaoming Yang <lepture@me.com>'
@@ -23,5 +22,4 @@ logging = Logger(
         'error': red,
     },
     icon=cyan('|-'),
-    progress_func=Progress(marker='-', right='>')
 )

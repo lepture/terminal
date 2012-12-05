@@ -1,3 +1,4 @@
+import time
 from terminal import logging
 
 logging.start('Start Application')
@@ -11,3 +12,7 @@ logging.info('hello info')
 logging.end()
 
 logging.end()
+
+for i in range(10):
+    logging.progress(i + 1, 10)
+    time.sleep(0.5)
