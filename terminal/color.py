@@ -71,7 +71,7 @@ _styles = {
     'italic': (3, 23),
     'underline': (4, 24),
     'blink': (5, 25),
-    'flip': (7, 27),
+    'inverse': (7, 27),
     'strike': (9, 29),
 }
 for _name in _styles:
@@ -79,13 +79,35 @@ for _name in _styles:
     codes[_name] = (_esc(_code[0]), _esc(_code[1]))
 
 
-_colors = [
-    'black', 'red', 'green', 'yellow',
-    'blue', 'magenta', 'cyan', 'white'
-]
+_colors = {
+    'black': 30,
+    'red': 31,
+    'green': 32,
+    'yellow': 33,
+    'blue': 34,
+    'magenta': 35,
+    'cyan': 36,
+    'white': 37,
+    'grey': 90,
+    'gray': 90,
+}
 
-for i, _name in enumerate(_colors):
-    codes[_name] = (_esc(i + 30), _esc(39))
+for _name in _colors:
+    num = _colors[_name]
+    codes[_name] = (_esc(num), _esc(39))
+    if num == 90:
+        num = 30
+    codes[_name + '_bg'] = (_esc(num + 10), _esc(49))
+
 
 for _name in codes:
     create_color_func(_name)
+
+
+if __name__ == '__main__':
+    for code in _colors:
+        exec('print %s("%s")' % (code, code))
+        exec('print %s_bg("%s")' % (code, code))
+
+    for code in _styles:
+        exec('print %s("%s")' % (code, code))
