@@ -6,6 +6,7 @@ A terminal environment tools.
 
 
 from .color import *
+from .utils import *
 from .logger import Logger
 
 
