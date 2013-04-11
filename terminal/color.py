@@ -18,17 +18,39 @@ def is_color_supported():
     return term in ('xterm', 'linux') or 'color' in term
 
 
+def is_256color_supported():
+    if not is_color_supported():
+        return False
+    term = os.environ.get('TERM', 'dumb').lower()
+    return '256' in term
+
+
 class Color(object):
     def __init__(self, *items):
         self.items = items
-        self.name = 'plain'
+        self.name = None
+        self.fgcolor = None
+        self.bgcolor = None
 
     def __str__(self):
-        code = codes.get(self.name, None)
         text = ''.join((unicode(item) for item in self.items))
-        if not code:
+        if not is_color_supported():
             return text
-        return '%s%s%s' % (code[0], text, code[1])
+
+        if isinstance(self.fgcolor, int) and is_256color_supported():
+            text = '\x1b[38;5;%im%s\x1b[0;39;49m' % (self.fgcolor, text)
+        elif isinstance(self.fgcolor, str):
+            code = codes.get(self.fgcolor, None)
+            if code:
+                text = '\x1b[%im%s\x1b[0;39;49m' % (code, text)
+
+        if isinstance(self.bgcolor, int) and is_256color_supported():
+            text = '\x1b[48;5;%im%s\x1b[0;39;49m' % (self.bgcolor, text)
+        elif isinstance(self.bgcolor, str):
+            code = codes.get(self.bgcolor, None)
+            if code:
+                text = '\x1b[%im%s\x1b[0;39;49m' % (code + 10, text)
+        return text
 
     def __repr__(self):
         return repr(unicode(self))
@@ -53,7 +75,10 @@ def colorize(name, text):
     if not is_color_supported():
         return text
     c = Color(text)
-    c.name = name
+    if name.endswith('_bg'):
+        c.bgcolor = name[:-3]
+    else:
+        c.fgcolor = name
     return c
 
 
@@ -63,45 +88,24 @@ def create_color_func(name):
     globals()[name] = inner
 
 
-def _esc(*codes):
-    return "\x1b[%sm" % (";".join([str(c) for c in codes]))
-
-_styles = {
-    'bold': (1, 22),
-    'italic': (3, 23),
-    'underline': (4, 24),
-    'blink': (5, 25),
-    'inverse': (7, 27),
-    'strike': (9, 29),
-}
-for _name in _styles:
-    _code = _styles[_name]
-    codes[_name] = (_esc(_code[0]), _esc(_code[1]))
-
-
-_colors = {
-    'black': 30,
-    'red': 31,
-    'green': 32,
-    'yellow': 33,
-    'blue': 34,
-    'magenta': 35,
-    'cyan': 36,
-    'white': 37,
-    'grey': 90,
-    'gray': 90,
-}
-
-for _name in _colors:
-    num = _colors[_name]
-    codes[_name] = (_esc(num), _esc(39))
-    if num == 90:
-        num = 30
-    codes[_name + '_bg'] = (_esc(num + 10), _esc(49))
-
-
-for _name in codes:
+_styles = [
+    'bold', 'faint', 'italic', 'underline', 'blink',
+    'overline', 'inverse', 'conceal', 'strike',
+]
+for i, _name in enumerate(_styles):
+    codes[_name] = i + 1
     create_color_func(_name)
+
+
+_colors = [
+    'black', 'red', 'green', 'yellow', 'blue',
+    'magenta', 'cyan', 'white'
+]
+
+for i, _name in enumerate(_colors):
+    codes[_name] = 30 + i
+    create_color_func(_name)
+    create_color_func(_name + '_bg')
 
 
 if __name__ == '__main__':
