@@ -2,6 +2,12 @@
 import os
 import sys
 
+# Python 3
+if sys.version_info[0] == 3:
+    string_type = str
+else:
+    string_type = basestring
+
 codes = {}
 
 
@@ -39,14 +45,14 @@ class Color(object):
 
         if isinstance(self.fgcolor, int) and is_256color_supported():
             text = '\x1b[38;5;%im%s\x1b[0;39;49m' % (self.fgcolor, text)
-        elif isinstance(self.fgcolor, str):
+        elif isinstance(self.fgcolor, string_type):
             code = codes.get(self.fgcolor, None)
             if code:
                 text = '\x1b[%im%s\x1b[0;39;49m' % (code, text)
 
         if isinstance(self.bgcolor, int) and is_256color_supported():
             text = '\x1b[48;5;%im%s\x1b[0;39;49m' % (self.bgcolor, text)
-        elif isinstance(self.bgcolor, str):
+        elif isinstance(self.bgcolor, string_type):
             code = codes.get(self.bgcolor, None)
             if code:
                 text = '\x1b[%im%s\x1b[0;39;49m' % (code + 10, text)
@@ -59,13 +65,13 @@ class Color(object):
         return sum([len(item) for item in self.items])
 
     def __add__(self, s):
-        if not isinstance(s, (basestring, Color)):
+        if not isinstance(s, (string_type, Color)):
             msg = "Concatenatation failed: %r + %r (Not a ColorString or str)"
             raise TypeError(msg % (type(s), type(self)))
         return Color(self, s)
 
     def __radd__(self, s):
-        if not isinstance(s, (basestring, Color)):
+        if not isinstance(s, (string_type, Color)):
             msg = "Concatenatation failed: %r + %r (Not a ColorString or str)"
             raise TypeError(msg % (type(s), type(self)))
         return Color(s, self)
