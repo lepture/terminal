@@ -1,0 +1,23 @@
+from terminal import Command
+
+
+class TestCommand(object):
+
+    def test_parse(self):
+        program = Command('foo')
+        program.option('-f', 'force')
+        program.option('-v, --verbose', 'show more log')
+        program.option('--no-color', 'output without color')
+        program.option('-t, --tag <tag>', 'tag name')
+        program.option('-s <source>', 'source repo')
+        program.option('--key <keyword>', 'keywords')
+
+        program.parse(
+            'foo -f -v --verbose --no-color bar -t tag --key=what'.split()
+        )
+
+        assert program.get('-f')
+        assert program.verbose
+        assert program.tag == 'tag'
+        assert program.color is False
+        assert program.keyword == 'what'

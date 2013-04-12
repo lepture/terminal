@@ -88,7 +88,7 @@ class Command(object):
         if '=' in arg:
             arg, value = arg.split('=')
 
-        regex = re.compile(r'(-\w)?(?:\,\s*)?(--\w+)?(\s+<.*>)?')
+        regex = re.compile(r'(-\w)?(?:\,\s*)?(--[\w\-]+)?(\s+<.*>)?')
         for option in self._option_list:
             name = option[0].strip()
             m = regex.findall(name)
@@ -96,10 +96,6 @@ class Command(object):
                 raise RuntimeError('Invalid Option: %s', name)
 
             shortname, longname, tag = m[0]
-
-            value = None
-            if tag and '=' in arg:
-                arg, value = arg.split('=')
 
             if arg not in (shortname, longname):
                 continue
