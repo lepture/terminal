@@ -6,22 +6,12 @@ A terminal environment tools.
 
 
 from .color import *
-from .utils import *
-from .logger import Logger, NestFormater
+from .prompt import *
+from .log import Logger
+from .command import Command
 
+log = Logger()
 
-__author__ = 'Hsiaoming Yang <lepture@me.com>'
-__version__ = '0.0.1'
 __homepage__ = 'http://lab.lepture.com/terminal/'
-
-
-logging = Logger(icon=cyan('|-'))
-
-logging.format_logger(
-    NestFormater(logging, colors={
-        'debug': grey,
-        'info': green,
-        'warn': yellow,
-        'error': red,
-    })
-)
+__author__ = 'Hsiaoming Yang <me@lepture.com>'
+__version__ = '0.1.0'

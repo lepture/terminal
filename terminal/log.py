@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import sys
+import copy
 
 
 class Logger(object):
-    def __init__(self, enable_verbose=False):
-        self._enable_verbose = enable_verbose
-        self._indent = 0
+    def __init__(self, **kwargs):
+        self.config(**kwargs)
 
     def config(self, **kwargs):
+        self._is_verbose = False
         self._indent = kwargs.get('indent', 0)
         self._enable_verbose = kwargs.get('verbose', False)
         self._enable_quiet = kwargs.get('quiet', False)
@@ -45,8 +46,9 @@ class Logger(object):
 
     @property
     def verbose(self):
-        self._is_verbose = True
-        return self
+        log = copy.copy(self)
+        log._is_verbose = True
+        return log
 
     def start(self, *args):
         self.writeln('start', *args)
