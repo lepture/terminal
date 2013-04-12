@@ -1,7 +1,8 @@
 Terminal
 ================================
 
-A terminal environment tools for python.
+A better terminal tools for python.
+
 
 Color
 -------
@@ -10,54 +11,36 @@ Color is inspired by fabulus.
 
 ::
 
-    >>> from terminal import red
-    >>> print red('hello world')
+    >>> import terminal
+    >>> print terminal.red('hello world')
 
 
-Logging
+Log
 --------
 
-Colorful and nested logging support::
+Nested and verbose supported logging.
 
-    from terminal import logging
+::
 
-    logging.start('==> Start Program')
-    logging.debug('reading config file')
-    logging.debug('loading config file')
-    logging.debug('prepare environment')
-
-    # this will be a nested logging
-    logging.start('==> Start Reading')
-    logging.debug('reading post in content directory')
-    logging.info('reading post "Hello World"')
-    logging.end('End Reading')
-
-    # another nested logging
-    logging.start('==> Start Writing')
-    logging.debug('writing post in output directory')
-    logging.info('writing post "Hello World"')
-    logging.end('End Writing')
-
-    logging.debug('This is a demo for debug')
-    logging.info('This is a demo for info')
-    logging.warn('This is a demo for warn')
-    logging.error('This is a demo for error')
-    logging.end('End Program')
-
-.. image:: assets/logging.png
-    :alt: logging
-
-Progress bar support::
-
-    import time
-    from terminal import logging
-
-    for i in range(20):
-        time.sleep(0.1)
-        logging.progress(i + 1, 20)
+    >> import terminal
+    >> terminal.log.info('hello')
+    >> terminal.log.verbose.info('hello')
+    >> terminal.log.config(verbose=True)
+    >> terminal.log.verbose.info('hello')
 
 
-Argument Parser
----------------
+Command
+--------
 
-TODO
+A simple and better argparser for python::
+
+    from terminal import Command
+    from terminal import log
+
+    program = Command(name='terminal', version='1.0.0')
+
+    program.option('-v, --verbose', 'show more logs')
+    program.parse()
+
+    if program.verbose:
+        log.config(verbose=True)
