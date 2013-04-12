@@ -10,8 +10,5 @@ eggs
 parts
 .DS_Store
 .installed.cfg
-deploy
-content
-debug.py
 docs/_build
 .tox
