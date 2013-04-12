@@ -8,8 +8,6 @@ if sys.version_info[0] == 3:
 else:
     string_type = basestring
 
-codes = {}
-
 
 def is_color_supported():
     "Find out if your terminal environment supports color."
@@ -31,10 +29,14 @@ def is_256color_supported():
     return '256' in term
 
 
+_reset = '\x1b[0;39;49m'
+
+
 class Color(object):
     def __init__(self, *items):
         self.items = items
-        self.name = None
+
+        self.styles = []
         self.fgcolor = None
         self.bgcolor = None
 
@@ -43,19 +45,23 @@ class Color(object):
         if not is_color_supported():
             return text
 
-        if isinstance(self.fgcolor, int) and is_256color_supported():
-            text = '\x1b[38;5;%im%s\x1b[0;39;49m' % (self.fgcolor, text)
-        elif isinstance(self.fgcolor, string_type):
-            code = codes.get(self.fgcolor, None)
-            if code:
-                text = '\x1b[%im%s\x1b[0;39;49m' % (code, text)
+        is256 = is_256color_supported()
+        if is256:
+            if self.fgcolor is not None:
+                text = '\x1b[38;5;%im%s%s' % (self.fgcolor, text, _reset)
+            if self.bgcolor is not None:
+                text = '\x1b[48;5;%im%s%s' % (self.bgcolor, text, _reset)
 
-        if isinstance(self.bgcolor, int) and is_256color_supported():
-            text = '\x1b[48;5;%im%s\x1b[0;39;49m' % (self.bgcolor, text)
-        elif isinstance(self.bgcolor, string_type):
-            code = codes.get(self.bgcolor, None)
-            if code:
-                text = '\x1b[%im%s\x1b[0;39;49m' % (code + 10, text)
+        else:
+            if self.fgcolor is not None and self.fgcolor < 8:
+                text = '\x1b[%im%s%s' % (30 + self.fgcolor, text, _reset)
+            if self.bgcolor is not None and self.bgcolor < 8:
+                text = '\x1b[%im%s%s' % (40 + self.bgcolor, text, _reset)
+
+        if self.styles:
+            code = ';'.join(str(i) for i in self.styles)
+            text = '\x1b[%sm%s%s' % (code, text, _reset)
+
         return text
 
     def __repr__(self):
@@ -77,45 +83,50 @@ class Color(object):
         return Color(s, self)
 
 
-def colorize(name, text):
-    if not is_color_supported():
-        return text
-    c = Color(text)
-    if name.endswith('_bg'):
-        c.bgcolor = name[:-3]
-    else:
-        c.fgcolor = name
-    return c
-
-
-def create_color_func(name):
+def _create_color_func(name, fgcolor=None, bgcolor=None, *styles):
     def inner(text):
-        return colorize(name, text)
+        c = Color(text)
+        c.fgcolor = fgcolor
+        c.bgcolor = bgcolor
+        c.styles = styles
+        return c
     globals()[name] = inner
 
 
-_styles = [
+_styles = (
     'bold', 'faint', 'italic', 'underline', 'blink',
     'overline', 'inverse', 'conceal', 'strike',
-]
+)
+
 for i, _name in enumerate(_styles):
-    codes[_name] = i + 1
-    create_color_func(_name)
+    _create_color_func(_name, None, None, i + 1)
 
 
-_colors = [
+_colors = (
     'black', 'red', 'green', 'yellow', 'blue',
     'magenta', 'cyan', 'white'
-]
+)
 
 for i, _name in enumerate(_colors):
-    codes[_name] = 30 + i
-    create_color_func(_name)
-    create_color_func(_name + '_bg')
+    _create_color_func(_name, fgcolor=i)
+    _create_color_func(_name + '_bg', bgcolor=i)
+
+
+for _name in ('grey', 'gray'):
+    if is_256color_supported():
+        _create_color_func(_name, fgcolor=8)
+        _create_color_func(_name + '_bg', bgcolor=8)
+    else:
+        _create_color_func(_name, 0, None, 1)
+        _create_color_func(_name + '_bg', None, 0, 1)
 
 
 if __name__ == '__main__':
     for code in _colors:
+        exec('print %s("%s")' % (code, code))
+        exec('print %s_bg("%s")' % (code, code))
+
+    for code in ('grey', 'gray'):
         exec('print %s("%s")' % (code, code))
         exec('print %s_bg("%s")' % (code, code))
 
