@@ -10,6 +10,48 @@ class Command(object):
     """
     The command interface.
 
+    Create a :class:`Command` instance in your cli file::
+
+        from terminal import Command
+        app = Command('name', 'description', 'version')
+
+    The command will add a default help option. If you set a version
+    parameter, it will add a default version option too. You can add
+    more options::
+
+        app.option('-v, --verbose', 'show more logs')
+        app.option('-o, --output <output>', 'the output file')
+
+    Usually you will need a subcommand feature, add a subcommand like
+    this::
+
+        subcommand = Command('build', 'build command')
+        subcommand.option('--source <source>', 'source directory')
+
+        app.action(subcommand)
+
+    A subcommand is a full featured Command, which means you can add
+    a subcommand to the subcommand too. We can add a subcommand with
+    the decorator feature::
+
+        @app
+        def build(source='.'):
+            '''
+            generate the documentation.
+
+            :param source: the source directory
+            '''
+            pass
+
+    After defining the command, we can parse the command line argv::
+
+        app.parse()
+
+    If we have pased ``--verbose`` in the terminal, we can get::
+
+        assert app.verbose is True
+
+
     :param name: program name
     :param description: description of the program
     :param version: version of the program
@@ -46,14 +88,15 @@ class Command(object):
 
         Example as decorator::
 
-            @program
+            @command
             def foo(port=5000):
                 '''
                 docstring as the description
 
                 :param port: description of port
                 '''
-                pass
+                # server(port)
+
         """
         doclines = func.__doc__.splitlines()
         doclines = filter(lambda o: o.strip(), doclines)
@@ -99,6 +142,9 @@ class Command(object):
         return self._rests
 
     def get(self, key):
+        """
+        Get parsed result.
+        """
         return self._results.get(key)
 
     def option(self, name, description=None, action=None):
