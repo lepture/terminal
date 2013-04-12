@@ -22,6 +22,7 @@ class Command(object):
         self._version = version
         self._usage = usage
 
+        self._default_func = None
         self._option_list = []
         self._command_list = []
 
@@ -39,6 +40,60 @@ class Command(object):
         except AttributeError:
             return self._results.get(key)
 
+    def __call__(self, func):
+        """
+        Decorator for add action.
+
+        Example as decorator::
+
+            @program
+            def foo(port=5000):
+                '''
+                docstring as the description
+
+                :param port: description of port
+                '''
+                pass
+        """
+        doclines = func.__doc__.splitlines()
+        doclines = filter(lambda o: o.strip(), doclines)
+        doclines = map(lambda o: o.strip(), doclines)
+
+        def find_description(arg):
+            text = ':param %s:' % arg
+            for line in doclines:
+                if line.startswith(text):
+                    return line.replace(text, '').strip()
+            return None
+
+        desc = None
+        if doclines:
+            desc = doclines[0]
+
+        cmd = Command(func.__name__, desc)
+
+        args, varargs, keywords, defaults = inspect.getargspec(func)
+
+        defaults = defaults or []
+        kwargs = dict(zip(*[reversed(i) for i in (args, defaults)]))
+
+        for arg in args:
+            desc = find_description(arg)
+            if arg in kwargs:
+                value = kwargs[arg]
+                if value is True:
+                    cmd.option('--no-%s' % arg, desc)
+                elif value is False:
+                    cmd.option('-%s, --%s' % (arg[0], arg), desc)
+                else:
+                    cmd.option('-%s, --%s <%s>' % (arg[0], arg, arg), desc)
+            else:
+                cmd.option('-%s, --%s <%s>' % (arg[0], arg, arg), desc)
+
+        cmd._default_func = func
+        self.action(cmd)
+        return func
+
     @property
     def args(self):
         return self._rests
@@ -46,7 +101,7 @@ class Command(object):
     def get(self, key):
         return self._results.get(key)
 
-    def option(self, name, description, action=None):
+    def option(self, name, description=None, action=None):
         """
         Add or get option.
 
@@ -156,8 +211,7 @@ class Command(object):
         if not cmd.startswith('-'):
             # parse subcommands
             for command in self._command_list:
-                if isinstance(command, Command) and command.name == cmd:
-                    command._parent = self
+                if isinstance(command, Command) and command._name == cmd:
                     return command.parse(self._args)
 
                 if inspect.isfunction(command) and command.__name__ == cmd:
@@ -169,6 +223,8 @@ class Command(object):
             if not self.parse_options(arg):
                 self._rests.append(arg)
 
+        if self._default_func:
+            self._default_func(**self._results)
         return self
 
     def print_version(self):
