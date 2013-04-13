@@ -23,9 +23,9 @@ setup(
     packages=['terminal'],
     description=terminal.__doc__,
     long_description=open('README.rst').read(),
-    license='BSD License',
+    license=open('LICENSE').read(),
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 3 - Alpha',
         'Environment :: Console',
         'License :: OSI Approved :: BSD License',
         'Operating System :: MacOS',
