@@ -3,20 +3,24 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to terminal's documentation!
-====================================
+Welcome to terminal
+===================
 
-Contents:
+Welcome to terminal's documentation.
+
+User's Guide
+=============
+
+This part of documentaion,
 
 .. toctree::
    :maxdepth: 2
 
 
+API Documentation
+=================
 
-Indices and tables
-==================
+.. toctree::
+   :maxdepth: 2
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+   api

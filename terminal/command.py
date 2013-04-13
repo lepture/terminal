@@ -151,12 +151,16 @@ class Command(object):
         """
         Add or get option.
 
-        :param name: arguments of the option
-        :param description: description of the option
+        Here are some examples::
 
-        ::
             command.option('-v, --verbose', 'show more log')
             command.option('--tag <tag>', 'tag of the package')
+            command.option('-s, --source <source>', 'the source repo')
+
+        :param name: arguments of the option
+        :param description: description of the option
+        :param action: a function to be invoked
+
         """
         self._option_list.append((name, description, action))
         return self
