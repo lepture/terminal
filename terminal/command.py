@@ -63,7 +63,7 @@ class Command(object):
         self._version = version
         self._usage = usage
 
-        self._default_func = None
+        self._command_func = None
         self._option_list = []
         self._command_list = []
 
@@ -266,7 +266,7 @@ class Command(object):
             else:
                 cmd.option('-%s, --%s <%s>' % (arg[0], arg, arg), desc)
 
-        cmd._default_func = func
+        cmd._command_func = func
         self._command_list.append(cmd)
         return self
 
@@ -284,6 +284,8 @@ class Command(object):
 
         self._args = argv[1:]
         if not self._args:
+            if self._command_func:
+                self._command_func(**self._results)
             return self
 
         cmd = self._args[0]
@@ -303,8 +305,8 @@ class Command(object):
             if not self.parse_options(arg):
                 self._rests.append(arg)
 
-        if self._default_func:
-            self._default_func(**self._results)
+        if self._command_func:
+            self._command_func(**self._results)
         return self
 
     def print_version(self):
