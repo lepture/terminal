@@ -10,17 +10,22 @@ class Command(object):
     """
     The command interface.
 
+    :param name: program name
+    :param description: description of the program
+    :param version: version of the program
+    :param usage: usage of the program
+
     Create a :class:`Command` instance in your cli file::
 
         from terminal import Command
-        app = Command('name', 'description', 'version')
+        command = Command('name', 'description', 'version')
 
     The command will add a default help option. If you set a version
     parameter, it will add a default version option too. You can add
     more options::
 
-        app.option('-v, --verbose', 'show more logs')
-        app.option('-o, --output <output>', 'the output file')
+        command.option('-v, --verbose', 'show more logs')
+        command.option('-o, --output <output>', 'the output file')
 
     Usually you will need a subcommand feature, add a subcommand like
     this::
@@ -28,13 +33,13 @@ class Command(object):
         subcommand = Command('build', 'build command')
         subcommand.option('--source <source>', 'source directory')
 
-        app.action(subcommand)
+        command.action(subcommand)
 
     A subcommand is a full featured Command, which means you can add
-    a subcommand to the subcommand too. We can add a subcommand with
-    the decorator feature::
+    a subcommand to the subcommand too. We can also add a subcommand
+    with the decorator feature::
 
-        @app
+        @command.action
         def build(source='.'):
             '''
             generate the documentation.
@@ -45,17 +50,11 @@ class Command(object):
 
     After defining the command, we can parse the command line argv::
 
-        app.parse()
+        command.parse()
 
     If we have pased ``--verbose`` in the terminal, we can get::
 
-        assert app.verbose is True
-
-
-    :param name: program name
-    :param description: description of the program
-    :param version: version of the program
-    :param usage: usage of the program
+        assert command.verbose is True
     """
 
     def __init__(self, name, description=None, version=None, usage=None):
@@ -85,18 +84,6 @@ class Command(object):
     def __call__(self, func):
         """
         Decorator for add action.
-
-        Example as decorator::
-
-            @command
-            def foo(port=5000):
-                '''
-                docstring as the description
-
-                :param port: description of port
-                '''
-                # server(port)
-
         """
         doclines = func.__doc__.splitlines()
         doclines = filter(lambda o: o.strip(), doclines)
@@ -139,12 +126,25 @@ class Command(object):
 
     @property
     def args(self):
+        """
+        argv that are not for options.
+        """
+
         return self._rests
 
     def get(self, key):
         """
         Get parsed result.
+
+        After :func:`parse` the argv, we can get the parsed results::
+
+            # command.option('-f', 'description of -f')
+            command.get('-f')
+
+            command.get('verbose')
+            # we can also get ``verbose``: command.verbose
         """
+
         return self._results.get(key)
 
     def option(self, name, description=None, action=None):
@@ -239,8 +239,29 @@ class Command(object):
         Add a subcommand.
 
         :param command: a function or a Command
+
+        You can add a :class:`Command` as an action, or a function::
+
+            command.action(subcommand)
+
+        If you prefer a decorator::
+
+            @command.action
+            def foo(port=5000):
+                '''
+                docstring as the description
+
+                :param port: description of port
+                '''
+                # server(port)
+
+        It will auto generate a subcommand from the ``foo`` function.
         """
-        self._command_list.append(command)
+
+        if isinstance(command, Command):
+            self._command_list.append(command)
+        else:
+            self(command)
         return self
 
     def parse(self, argv=None):
@@ -249,6 +270,7 @@ class Command(object):
 
         :param argv: default is sys.argv
         """
+
         if not argv:
             argv = sys.argv
 
@@ -278,14 +300,39 @@ class Command(object):
         return self
 
     def print_version(self):
+        """
+        Print the program version.
+        """
+
         print('  %s %s' % (self._name, self._version or ''))
         return self
 
     def print_title(self, title):
+        """
+        Print output the title.
+
+        You can create a colorized title by::
+
+            class MyCommand(Command):
+
+                def print_title(self, title):
+                    if 'Options' in title:
+                        print(terminal.magenta(title))
+                    elif 'Commands' in title:
+                        print(terminal.green(title))
+                    return self
+
+        You can get the color function with ``terminal``.
+        """
+
         print(title)
         return self
 
     def print_help(self):
+        """
+        Print the help menu.
+        """
+
         print('')
         self.print_version()
 
