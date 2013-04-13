@@ -70,7 +70,7 @@ Prompt communication
 --------------------
 
 Many terminal programs will communicate with the users, this could be easy
-with :class:`terminal.prompt`.
+with :class:`prompt`.
 
 Let's create a prompt to ask the user's name::
 
@@ -82,14 +82,14 @@ We could set a default name for the user::
 
     username = terminal.prompt('what is your name', 'Kate')
 
-It is not a good idea to get a password with :class:`terminal.prompt`, instead,
-terminal provided a :class:`terminal.prompt_password` for you::
+It is not a good idea to get a password with :class:`prompt`, instead,
+terminal provided a :class:`password` for you::
 
-    password = terminal.prompt_password('what is your password')
+    password = terminal.password('what is your password')
 
 Want more on prompt?
 
-We have :class:`terminal.prompt_bool` and :class:`terminal.prompt_choices`.
+We have :class:`terminal.confirm` and :class:`terminal.choose`.
 
 
 Command line

@@ -21,7 +21,7 @@ def prompt(name, default=None):
             return default
 
 
-def prompt_password(name, default=None):
+def password(name, default=None):
     """
     Grabs hidden (password) input from command line.
 
@@ -39,7 +39,7 @@ def prompt_password(name, default=None):
             return default
 
 
-def prompt_bool(name, default=False, yes_choices=None, no_choices=None):
+def confirm(name, default=False, yes_choices=None, no_choices=None):
     """
     Grabs user input from command line and converts to boolean
     value.
@@ -63,8 +63,7 @@ def prompt_bool(name, default=False, yes_choices=None, no_choices=None):
             return False
 
 
-def prompt_choices(name, choices, default=None, resolve=None,
-                   no_choice=('none',)):
+def choose(name, choices, default=None, resolve=None, no_choice=('none',)):
     """
     Grabs user input from command line from set of provided choices.
 

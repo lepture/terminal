@@ -35,9 +35,9 @@ Prompt
 Prompt are functions to communicate with the terminal.
 
 .. autofunction:: prompt
-.. autofunction:: prompt_password
-.. autofunction:: prompt_bool
-.. autofunction:: prompt_choices
+.. autofunction:: password
+.. autofunction:: confirm
+.. autofunction:: choose
 
 Colors
 ------
