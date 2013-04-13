@@ -7,14 +7,12 @@ coverage:
 	@rm -f .coverage
 	@nosetests --with-cov terminal tests/
 
-clean: clean-build clean-pyc
+clean: clean-build clean-pyc clean-docs
 
 
 clean-build:
-	@rm -fr deploy/
 	@rm -fr build/
 	@rm -fr dist/
-	@rm -fr test/build/
 	@rm -fr *.egg-info
 
 
@@ -23,6 +21,9 @@ clean-pyc:
 	@find . -name '*.pyo' -exec rm -f {} +
 	@find . -name '*~' -exec rm -f {} +
 	@find . -name '__pycache__' -exec rm -fr {} +
+
+clean-docs:
+	@rm -fr  docs/_build
 
 docs:
 	@git submodule init

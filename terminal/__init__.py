@@ -14,4 +14,4 @@ log = Logger()
 
 __homepage__ = 'http://lab.lepture.com/terminal/'
 __author__ = 'Hsiaoming Yang <me@lepture.com>'
-__version__ = '0.1.0'
+__version__ = '0.1.0a1'
