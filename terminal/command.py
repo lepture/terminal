@@ -82,47 +82,7 @@ class Command(object):
             return self._results.get(key)
 
     def __call__(self, func):
-        """
-        Decorator for add action.
-        """
-        doclines = func.__doc__.splitlines()
-        doclines = filter(lambda o: o.strip(), doclines)
-        doclines = map(lambda o: o.strip(), doclines)
-
-        def find_description(arg):
-            text = ':param %s:' % arg
-            for line in doclines:
-                if line.startswith(text):
-                    return line.replace(text, '').strip()
-            return None
-
-        desc = None
-        if doclines:
-            desc = doclines[0]
-
-        cmd = Command(func.__name__, desc)
-
-        args, varargs, keywords, defaults = inspect.getargspec(func)
-
-        defaults = defaults or []
-        kwargs = dict(zip(*[reversed(i) for i in (args, defaults)]))
-
-        for arg in args:
-            desc = find_description(arg)
-            if arg in kwargs:
-                value = kwargs[arg]
-                if value is True:
-                    cmd.option('--no-%s' % arg, desc)
-                elif value is False:
-                    cmd.option('-%s, --%s' % (arg[0], arg), desc)
-                else:
-                    cmd.option('-%s, --%s <%s>' % (arg[0], arg, arg), desc)
-            else:
-                cmd.option('-%s, --%s <%s>' % (arg[0], arg, arg), desc)
-
-        cmd._default_func = func
-        self.action(cmd)
-        return func
+        return self.action(func)
 
     @property
     def args(self):
@@ -260,8 +220,54 @@ class Command(object):
 
         if isinstance(command, Command):
             self._command_list.append(command)
+            return self
+
+        # it is a function
+        func = command
+        args, varargs, keywords, defaults = inspect.getargspec(func)
+        if not args:
+            # a pure function
+            self._command_list.append(func)
+            return self
+
+        if func.__doc__:
+            doclines = func.__doc__.splitlines()
         else:
-            self(command)
+            doclines = []
+        doclines = filter(lambda o: o.strip(), doclines)
+        doclines = map(lambda o: o.strip(), doclines)
+
+        def find_description(arg):
+            text = ':param %s:' % arg
+            for line in doclines:
+                if line.startswith(text):
+                    return line.replace(text, '').strip()
+            return None
+
+        desc = None
+        if doclines:
+            desc = doclines[0]
+
+        cmd = Command(func.__name__, desc)
+
+        defaults = defaults or []
+        kwargs = dict(zip(*[reversed(i) for i in (args, defaults)]))
+
+        for arg in args:
+            desc = find_description(arg)
+            if arg in kwargs:
+                value = kwargs[arg]
+                if value is True:
+                    cmd.option('--no-%s' % arg, desc)
+                elif value is False:
+                    cmd.option('-%s, --%s' % (arg[0], arg), desc)
+                else:
+                    cmd.option('-%s, --%s <%s>' % (arg[0], arg, arg), desc)
+            else:
+                cmd.option('-%s, --%s <%s>' % (arg[0], arg, arg), desc)
+
+        cmd._default_func = func
+        self._command_list.append(cmd)
         return self
 
     def parse(self, argv=None):
@@ -273,6 +279,8 @@ class Command(object):
 
         if not argv:
             argv = sys.argv
+        elif isinstance(argv, str):
+            argv = argv.split()
 
         self._args = argv[1:]
         if not self._args:
