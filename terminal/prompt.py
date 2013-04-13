@@ -21,7 +21,7 @@ def prompt(name, default=None):
             return default
 
 
-def prompt_pass(name, default=None):
+def prompt_password(name, default=None):
     """
     Grabs hidden (password) input from command line.
 
