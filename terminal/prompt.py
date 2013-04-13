@@ -63,7 +63,7 @@ def prompt_bool(name, default=False, yes_choices=None, no_choices=None):
             return False
 
 
-def prompt_choices(name, choices, default=None, resolve=string.lower,
+def prompt_choices(name, choices, default=None, resolve=None,
                    no_choice=('none',)):
     """
     Grabs user input from command line from set of provided choices.
@@ -74,6 +74,9 @@ def prompt_choices(name, choices, default=None, resolve=string.lower,
     :param default: default value if no input provided.
     :param no_choice: acceptable list of strings for "null choice"
     """
+
+    if not resolve:
+        resolve = string.lower
 
     _choices = []
     options = []
