@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import copy
+from . import color
 
 
 class Logger(object):
@@ -22,6 +23,10 @@ class Logger(object):
     """
 
     def __init__(self, **kwargs):
+        self._indent = 0
+        self._is_verbose = False
+        self._enable_verbose = False
+        self._enable_quiet = False
         self.config(**kwargs)
 
     def config(self, **kwargs):
@@ -38,11 +43,13 @@ class Logger(object):
             log.config(quiet=True)
 
         """
-
-        self._is_verbose = False
-        self._indent = kwargs.get('indent', 0)
-        self._enable_verbose = kwargs.get('verbose', False)
-        self._enable_quiet = kwargs.get('quiet', False)
+        if 'indent' in kwargs:
+            self._indent = kwargs.get('indent', 0)
+        if 'verbose' in kwargs:
+            self._enable_verbose = kwargs.get('verbose', False)
+        if 'quiet' in kwargs:
+            self._enable_quiet = kwargs.get('quiet', False)
+        return self
 
     def message(self, level, *args):
         """
@@ -60,7 +67,6 @@ class Logger(object):
                     return msg
         """
 
-        from . import color
         msg = ' '.join(args)
         if level == 'start':
             return color.magenta('=> ') + msg
@@ -82,11 +88,11 @@ class Logger(object):
             return self
         msg = self.message(level, *args)
         if self._indent:
-            msg = '  ' * self._indent + msg
+            msg = '%s%s' % ('  ' * self._indent, msg)
         if level == 'error':
-            sys.stderr.write(msg + '\n')
+            sys.stderr.write('%s\n' % msg)
         else:
-            sys.stdout.write(msg + '\n')
+            sys.stdout.write('%s\n' % msg)
         return self
 
     @property
@@ -120,6 +126,8 @@ class Logger(object):
         """
 
         self._indent -= 1
+        if not args:
+            return self
         return self.writeln('end', *args)
 
     def debug(self, *args):
