@@ -139,6 +139,15 @@ class Command(object):
             )
         return self
 
+    def add_log_options(self, verbose_func=None, quiet_func=None):
+        """
+        A helper for setting up log options
+        """
+
+        self.option('-v, --verbose', 'show more logs', verbose_func)
+        self.option('-q, --quiet', 'show less logs', quiet_func)
+        return self
+
     def parse_options(self, arg):
         """
         Parse options with the argv
@@ -314,7 +323,7 @@ class Command(object):
         """
 
         print('  %s %s' % (self._name, self._version or ''))
-        return self
+        return sys.exit(0)
 
     def print_title(self, title):
         """
@@ -342,8 +351,7 @@ class Command(object):
         Print the help menu.
         """
 
-        print('')
-        self.print_version()
+        print('\n  %s %s' % (self._name, self._version or ''))
 
         if self._usage:
             print('\n  %s' % self._usage)
