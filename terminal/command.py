@@ -168,7 +168,6 @@ class Command(object):
             action = option[2]
             if action:
                 action()
-                return sys.exit(0)
 
             if not tag and not longname:
                 self._results[shortname] = True
