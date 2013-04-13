@@ -7,8 +7,10 @@ major, minor = sys.version_info[:2]
 if major >= 3:
     kwargs['use_2to3'] = True
 
-from setuptools import setup
+if sys.platform == 'win32':
+    kwargs['install_requires'] = ['colorama']
 
+from setuptools import setup
 
 import terminal
 from email.utils import parseaddr
