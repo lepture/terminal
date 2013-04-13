@@ -21,3 +21,16 @@ class TestCommand(object):
         assert program.tag == 'tag'
         assert program.color is False
         assert program.keyword == 'what'
+
+    def test_action(self):
+        program = Command('foo')
+
+        @program.action
+        def lepture(bar):
+            assert bar == 'lepture'
+
+        program.parse('foo lepture --bar lepture')
+
+        # subcommand itself
+        program.action(program)
+        program.parse('foo foo lepture --bar lepture')
