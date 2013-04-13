@@ -9,16 +9,16 @@ Terminal only depends on the built-in battery, it is light weight.
 .. module:: terminal
 
 
-Command Object
---------------
+Command
+-------
 
 Command is the interface which you can create a command parser.
 
 .. autoclass:: Command
    :members:
 
-Logger Object
--------------
+Logger
+------
 
 Logger is the interface which you can create a logging instance.
 We do have a initialized instance on terminal::
@@ -31,6 +31,8 @@ We do have a initialized instance on terminal::
 
 Prompt
 ------
+
+Prompt are functions to communicate with the terminal.
 
 .. autofunction:: prompt
 .. autofunction:: prompt_password

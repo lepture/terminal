@@ -3,24 +3,43 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to terminal
-===================
+Terminal: for Simple and Beautiful
+==================================
 
-Welcome to terminal's documentation.
+Terminal is designed for creating terminal-base tools, written in Python,
+for developers who like simple and beautiful things.
+
+Python's standard **logging** and **argparse** (or optparse) modules are
+powerful, but the API is thoroughly ugly and hard to use. Terminal is
+designed to make life simpler and better.
+
 
 User's Guide
-=============
+------------
 
-This part of documentaion,
+This part of the documentation, which is mostly prose, begins with some
+background information about Terminal, then focuses on step-by-step
+instructions for getting the most out of Terminal.
 
 .. toctree::
    :maxdepth: 2
 
+   intro
+   install
+   quickstart
 
 API Documentation
-=================
+-----------------
+
+If you are looking for information on a specific function, class or method,
+this part of the documentation is for you.
 
 .. toctree::
    :maxdepth: 2
 
    api
+
+Contributor's Guide
+-------------------
+
+If you want to contribute to the project, this part of documentation is for you.

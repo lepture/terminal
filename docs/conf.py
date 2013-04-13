@@ -44,7 +44,9 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'terminal'
-copyright = u'2013, Hsiaoming Yang'
+
+import datetime
+copyright = u'%i, <a href="http://lepture.com/">Hsiaoming Yang</a>' % datetime.datetime.utcnow().year
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -137,9 +139,9 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
-    'index': ['sidebarintro.html', 'sourcelink.html', 'searchbox.html'],
+    'index': ['sidebarintro.html', 'searchbox.html'],
     '**': ['sidebarintro.html', 'localtoc.html', 'relations.html',
-           'sourcelink.html', 'searchbox.html']
+           'searchbox.html']
 }
 
 # Additional templates that should be rendered to pages, maps page names to
@@ -156,7 +158,7 @@ html_sidebars = {
 #html_split_index = False
 
 # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
+html_show_sourcelink = False
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 #html_show_sphinx = True
