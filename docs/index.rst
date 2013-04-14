@@ -43,3 +43,9 @@ Contributor's Guide
 -------------------
 
 If you want to contribute to the project, this part of documentation is for you.
+
+.. toctree::
+   :maxdepth: 2
+
+   contrib
+   authors
