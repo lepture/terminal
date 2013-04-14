@@ -6,7 +6,10 @@ kwargs = {}
 if sys.platform == 'win32':
     kwargs['install_requires'] = ['colorama']
 
-from setuptools import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 import terminal
 from email.utils import parseaddr
@@ -32,7 +35,6 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.1',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: Implementation :: CPython',
     ],
