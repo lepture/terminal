@@ -44,6 +44,9 @@ Colors
 
 .. autoclass:: Color
 
+.. autofunction:: colorize
+
+
 Front colors
 ~~~~~~~~~~~~
 

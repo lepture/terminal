@@ -41,7 +41,57 @@ def is_256color_supported():
     return '256' in term
 
 
+def rgb2ansi(r, g, b):
+    """
+    Convert an RGB color to 256 ansi graphics.
+    """
+
+    grayscale = False
+    poss = True
+    step = 2.5
+
+    while poss:
+        if min(r, g, b) < step:
+            grayscale = max(r, g, b) < step
+            poss = False
+
+        step += 42.5
+
+    if grayscale:
+        return 232 + int(float(sum((r, g, b)) / 33.0))
+
+    m = ((r, 36), (g, 6), (b, 1))
+    return 16 + sum(int(6 * float(val) / 256) * mod for val, mod in m)
+
+
+def hex2ansi(code):
+    """
+    Convert hex code to ansi.
+    """
+
+    if code.startswith('#'):
+        code = code[1:]
+
+    if len(code) == 3:
+        # efc -> eeffcc
+        return rgb2ansi(*map(lambda o: int(o * 2, 16), code))
+
+    if len(code) != 6:
+        raise ValueError('invalid color code')
+
+    rgb = (code[:2], code[2:4], code[4:])
+    return rgb2ansi(*map(lambda o: int(o, 16), rgb))
+
+
 _reset = '\x1b[0;39;49m'
+_styles = (
+    'bold', 'faint', 'italic', 'underline', 'blink',
+    'overline', 'inverse', 'conceal', 'strike',
+)
+_colors = (
+    'black', 'red', 'green', 'yellow', 'blue',
+    'magenta', 'cyan', 'white'
+)
 
 
 class Color(object):
@@ -96,6 +146,45 @@ class Color(object):
             msg = "Concatenatation failed: %r + %r (Not a ColorString or str)"
             raise TypeError(msg % (type(s), type(self)))
         return Color(s, self)
+
+
+def colorize(text, color):
+    """
+    Colorize text with hex code.
+
+    :param text: the text you want to paint
+    :param color: a hex color or rgb color
+
+    ::
+
+        colorize('hello', 'ff0000')
+        colorize('hello', '#ff0000')
+        colorize('hello', (255, 0, 0))
+
+    """
+
+    if color in _styles:
+        c = Color(text)
+        c.styles = [_styles.index(color) + 1]
+        return c
+
+    if color in _colors:
+        c = Color(text)
+        c.fgcolor = _colors.index(color)
+        return c
+
+    code = None
+    if isinstance(color, string_type):
+        code = hex2ansi(color)
+    elif isinstance(color, (tuple, list)):
+        code = rgb2ansi(*color)
+
+    if not code:
+        return text
+
+    c = Color(text)
+    c.fgcolor = code
+    return c
 
 
 def _create_color_func(text, fgcolor=None, bgcolor=None, *styles):
