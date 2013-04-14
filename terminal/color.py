@@ -102,6 +102,18 @@ _colors = (
 )
 
 
+def _color2ansi(color):
+    if color in _colors:
+        return _colors.index(color)
+
+    if isinstance(color, string_type):
+        return hex2ansi(color)
+    elif isinstance(color, (tuple, list)):
+        return rgb2ansi(*color)
+
+    raise ValueError('invalid color: %s' % color)
+
+
 class Color(object):
     """
     Color object for painters.
@@ -156,15 +168,11 @@ class Color(object):
 
         is256 = is_256color_supported()
 
-        if isinstance(self.fgcolor, string_type):
-            self.fgcolor = hex2ansi(self.fgcolor)
-        elif isinstance(self.fgcolor, (tuple, list)):
-            self.fgcolor = rgb2ansi(self.fgcolor)
+        if self.fgcolor and not isinstance(self.fgcolor, int):
+            self.fgcolor = _color2ansi(self.fgcolor)
 
-        if isinstance(self.bgcolor, string_type):
-            self.bgcolor = hex2ansi(self.bgcolor)
-        elif isinstance(self.bgcolor, (tuple, list)):
-            self.bgcolor = rgb2ansi(self.bgcolor)
+        if self.bgcolor and not isinstance(self.bgcolor, int):
+            self.bgcolor = _color2ansi(self.bgcolor)
 
         if is256:
             if self.fgcolor is not None:
@@ -223,22 +231,8 @@ def colorize(text, color):
         c.styles = [_styles.index(color) + 1]
         return c
 
-    if color in _colors:
-        c = Color(text)
-        c.fgcolor = _colors.index(color)
-        return c
-
-    code = None
-    if isinstance(color, string_type):
-        code = hex2ansi(color)
-    elif isinstance(color, (tuple, list)):
-        code = rgb2ansi(*color)
-
-    if not code:
-        return text
-
     c = Color(text)
-    c.fgcolor = code
+    c.fgcolor = _color2ansi(color)
     return c
 
 
