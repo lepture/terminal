@@ -52,7 +52,7 @@ class Color(object):
         self.bgcolor = None
 
     def __str__(self):
-        return unicode(self).encode()
+        return unicode(self).encode('utf-8')
 
     def __unicode__(self):
         text = ''.join(unicode(item) for item in self.items)
