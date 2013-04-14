@@ -43,3 +43,40 @@ Colors
 ------
 
 .. autoclass:: Color
+
+Front colors
+~~~~~~~~~~~~
+
+.. autofunction:: black
+.. autofunction:: red
+.. autofunction:: green
+.. autofunction:: yellow
+.. autofunction:: blue
+.. autofunction:: magenta
+.. autofunction:: cyan
+.. autofunction:: white
+
+Background colors
+~~~~~~~~~~~~~~~~~
+
+.. autofunction:: black_bg
+.. autofunction:: red_bg
+.. autofunction:: green_bg
+.. autofunction:: yellow_bg
+.. autofunction:: blue_bg
+.. autofunction:: magenta_bg
+.. autofunction:: cyan_bg
+.. autofunction:: white_bg
+
+Styles
+~~~~~~
+
+.. autofunction:: bold
+.. autofunction:: faint
+.. autofunction:: italic
+.. autofunction:: underline
+.. autofunction:: blink
+.. autofunction:: overline
+.. autofunction:: inverse
+.. autofunction:: conceal
+.. autofunction:: strike

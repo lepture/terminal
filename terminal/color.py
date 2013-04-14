@@ -34,6 +34,7 @@ def is_color_supported():
 
 
 def is_256color_supported():
+    "Find out if your terminal environment supports 256 color."
     if not is_color_supported():
         return False
     term = os.environ.get('TERM', 'dumb').lower()
@@ -97,52 +98,216 @@ class Color(object):
         return Color(s, self)
 
 
-def _create_color_func(name, fgcolor=None, bgcolor=None, *styles):
-    def inner(text):
-        c = Color(text)
-        c.fgcolor = fgcolor
-        c.bgcolor = bgcolor
-        c.styles = styles
-        return c
-    globals()[name] = inner
+def _create_color_func(text, fgcolor=None, bgcolor=None, *styles):
+    c = Color(text)
+    c.fgcolor = fgcolor
+    c.bgcolor = bgcolor
+    c.styles = styles
+    return c
 
 
-_styles = (
-    'bold', 'faint', 'italic', 'underline', 'blink',
-    'overline', 'inverse', 'conceal', 'strike',
-)
-
-for i, _name in enumerate(_styles):
-    _create_color_func(_name, None, None, i + 1)
+def bold(text):
+    """
+    Bold style.
+    """
+    return _create_color_func(text, None, None, 1)
 
 
-_colors = (
-    'black', 'red', 'green', 'yellow', 'blue',
-    'magenta', 'cyan', 'white'
-)
-
-for i, _name in enumerate(_colors):
-    _create_color_func(_name, fgcolor=i)
-    _create_color_func(_name + '_bg', bgcolor=i)
+def faint(text):
+    """
+    Faint style.
+    """
+    return _create_color_func(text, None, None, 2)
 
 
-for _name in ('grey', 'gray'):
+def italic(text):
+    """
+    Italic style.
+    """
+    return _create_color_func(text, None, None, 3)
+
+
+def underline(text):
+    """
+    Underline style.
+    """
+    return _create_color_func(text, None, None, 4)
+
+
+def blink(text):
+    """
+    Blink style.
+    """
+    return _create_color_func(text, None, None, 5)
+
+
+def overline(text):
+    """
+    Overline style.
+    """
+    return _create_color_func(text, None, None, 6)
+
+
+def inverse(text):
+    """
+    Inverse style.
+    """
+    return _create_color_func(text, None, None, 7)
+
+
+def conceal(text):
+    """
+    Conceal style.
+    """
+    return _create_color_func(text, None, None, 8)
+
+
+def strike(text):
+    """
+    Strike style.
+    """
+    return _create_color_func(text, None, None, 9)
+
+
+def black(text):
+    """
+    Black color.
+    """
+    return _create_color_func(text, fgcolor=0)
+
+
+def red(text):
+    """
+    Red color.
+    """
+    return _create_color_func(text, fgcolor=1)
+
+
+def green(text):
+    """
+    Green color.
+    """
+    return _create_color_func(text, fgcolor=2)
+
+
+def yellow(text):
+    """
+    Yellow color.
+    """
+    return _create_color_func(text, fgcolor=3)
+
+
+def blue(text):
+    """
+    Blue color.
+    """
+    return _create_color_func(text, fgcolor=4)
+
+
+def magenta(text):
+    """
+    Magenta color.
+    """
+    return _create_color_func(text, fgcolor=5)
+
+
+def cyan(text):
+    """
+    Cyan color.
+    """
+    return _create_color_func(text, fgcolor=6)
+
+
+def white(text):
+    """
+    White color.
+    """
+    return _create_color_func(text, fgcolor=7)
+
+
+def gray(text):
+    """
+    Gray color.
+    """
     if is_256color_supported():
-        _create_color_func(_name, fgcolor=8)
-        _create_color_func(_name + '_bg', bgcolor=8)
-    else:
-        _create_color_func(_name, 0, None, 1)
-        _create_color_func(_name + '_bg', None, 0, 1)
+        return _create_color_func(text, fgcolor=8)
+    return _create_color_func(text, 0, None, 8)
 
 
-if __name__ == '__main__':
-    for code in _colors:
-        exec('print %s("%s")' % (code, code))
-        exec('print %s_bg("%s")' % (code, code))
+def grey(text):
+    """
+    Alias of gray.
+    """
+    return gray(text)
 
-    for code in ('grey', 'gray'):
-        exec('print %s("%s")' % (code, code))
-        exec('print %s_bg("%s")' % (code, code))
 
-    for code in _styles:
-        exec('print %s("%s")' % (code, code))
+def black_bg(text):
+    """
+    Black background.
+    """
+    return _create_color_func(text, bgcolor=0)
+
+
+def red_bg(text):
+    """
+    Red background.
+    """
+    return _create_color_func(text, bgcolor=1)
+
+
+def green_bg(text):
+    """
+    Green background.
+    """
+    return _create_color_func(text, bgcolor=2)
+
+
+def yellow_bg(text):
+    """
+    Yellow background.
+    """
+    return _create_color_func(text, bgcolor=3)
+
+
+def blue_bg(text):
+    """
+    Blue background.
+    """
+    return _create_color_func(text, bgcolor=4)
+
+
+def magenta_bg(text):
+    """
+    Magenta background.
+    """
+    return _create_color_func(text, bgcolor=5)
+
+
+def cyan_bg(text):
+    """
+    Cyan background.
+    """
+    return _create_color_func(text, bgcolor=6)
+
+
+def white_bg(text):
+    """
+    White background.
+    """
+    return _create_color_func(text, bgcolor=7)
+
+
+def gray_bg(text):
+    """
+    Gray background.
+    """
+    if is_256color_supported():
+        return _create_color_func(text, bgcolor=8)
+    return _create_color_func(text, None, 0, 1)
+
+
+def grey_bg(text):
+    """
+    Alias of gray_bg.
+    """
+    return gray_bg(text)
