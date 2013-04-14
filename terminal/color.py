@@ -52,7 +52,10 @@ class Color(object):
         self.bgcolor = None
 
     def __str__(self):
-        text = ''.join((unicode(item) for item in self.items))
+        return unicode(self).encode()
+
+    def __unicode__(self):
+        text = ''.join(unicode(item) for item in self.items)
         if not is_color_supported():
             return text
 
