@@ -1,46 +1,29 @@
-Terminal
-================================
+Terminal: for Simple and Beautiful
+==================================
 
 A better terminal tools for python.
 
 
-Color
--------
-
-Color is inspired by fabulus.
-
-::
-
-    >>> import terminal
-    >>> print terminal.red('hello world')
-
-
-Log
+Features
 --------
 
-Nested and verbose supported logging.
+* An easy to use command parser
+* Full featured ANSI colors and styles
+* Full featured prompt communcation
+* Nested and verbose logging
+* No dependencies (windows need colorama)
 
-::
+Installation
+------------
 
-    >> import terminal
-    >> terminal.log.info('hello')
-    >> terminal.log.verbose.info('hello')
-    >> terminal.log.config(verbose=True)
-    >> terminal.log.verbose.info('hello')
+To install terminal, simply::
+
+    $ pip install terminal
 
 
-Command
---------
+Contribute
+----------
 
-A simple and better argparser for python::
+Read the `Contribution Guide`_.
 
-    from terminal import Command
-    from terminal import log
-
-    program = Command(name='terminal', version='1.0.0')
-
-    program.option('-v, --verbose', 'show more logs')
-    program.parse()
-
-    if program.verbose:
-        log.config(verbose=True)
+.. _`Contribution Guide`: https://github.com/lepture/terminal/blob/master/CONTRIBUTING.rst
