@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+
+# http://en.wikipedia.org/wiki/ANSI_escape_code
+# http://en.wikipedia.org/wiki/Web_colors
+# https://gist.github.com/MicahElliott/719710
+
 import os
 import sys
 
@@ -45,6 +50,9 @@ def rgb2ansi(r, g, b):
     """
     Convert an RGB color to 256 ansi graphics.
     """
+
+    # Thanks to
+    # https://github.com/tehmaze/ansi/blob/master/ansi/colour/rgb.py
 
     grayscale = False
     poss = True
@@ -104,9 +112,10 @@ class Color(object):
     But if you are so interested in this module, you are welcome to
     use some advanced features::
 
-        c = Color('text')
-        print(c.bold.red.italic)
+        s = Color('text')
+        print(s.bold.red.italic)
 
+    All ANSI colors and styles are available on Color.
     """
 
     def __init__(self, *items):
@@ -146,6 +155,17 @@ class Color(object):
             return text
 
         is256 = is_256color_supported()
+
+        if isinstance(self.fgcolor, string_type):
+            self.fgcolor = hex2ansi(self.fgcolor)
+        elif isinstance(self.fgcolor, (tuple, list)):
+            self.fgcolor = rgb2ansi(self.fgcolor)
+
+        if isinstance(self.bgcolor, string_type):
+            self.bgcolor = hex2ansi(self.bgcolor)
+        elif isinstance(self.bgcolor, (tuple, list)):
+            self.bgcolor = rgb2ansi(self.bgcolor)
+
         if is256:
             if self.fgcolor is not None:
                 text = '\x1b[38;5;%im%s%s' % (self.fgcolor, text, _reset)
