@@ -67,7 +67,7 @@ class Command(object):
         self._command_list = []
 
         self._results = {}
-        self._rests = []
+        self._args_results = []
 
         self.add_default_options()
 
@@ -89,7 +89,7 @@ class Command(object):
         argv that are not for options.
         """
 
-        return self._rests
+        return self._args_results
 
     def get(self, key):
         """
@@ -191,9 +191,9 @@ class Command(object):
 
             # has tag, it should has value
             if not value:
-                if self._args:
-                    value = self._args[0]
-                    self._args = self._args[1:]
+                if self._argv:
+                    value = self._argv[0]
+                    self._argv = self._argv[1:]
 
             tag = tag.strip()
             self._results[tag[1:-1]] = value
@@ -289,28 +289,28 @@ class Command(object):
         elif isinstance(argv, str):
             argv = argv.split()
 
-        self._args = argv[1:]
-        if not self._args:
+        self._argv = argv[1:]
+        if not self._argv:
             if self._command_func:
                 self._command_func(**self._results)
             return self
 
-        cmd = self._args[0]
+        cmd = self._argv[0]
 
         if not cmd.startswith('-'):
             # parse subcommands
             for command in self._command_list:
                 if isinstance(command, Command) and command._name == cmd:
-                    return command.parse(self._args)
+                    return command.parse(self._argv)
 
                 if inspect.isfunction(command) and command.__name__ == cmd:
                     return command()
 
-        while self._args:
-            arg = self._args[0]
-            self._args = self._args[1:]
+        while self._argv:
+            arg = self._argv[0]
+            self._argv = self._argv[1:]
             if not self.parse_options(arg):
-                self._rests.append(arg)
+                self._args_results.append(arg)
 
         if self._command_func:
             self._command_func(**self._results)
