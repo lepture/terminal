@@ -3,9 +3,10 @@
 test:
 	@nosetests -s
 
+repoter = html
 coverage:
 	@rm -f .coverage
-	@nosetests --with-cov terminal tests/
+	@nosetests --with-cov terminal tests --cov-report=${repoter}
 
 clean: clean-build clean-pyc clean-docs
 
