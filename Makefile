@@ -26,6 +26,4 @@ clean-docs:
 	@rm -fr  docs/_build
 
 docs:
-	@git submodule init
-	@git submodule update
 	@$(MAKE) -C docs html

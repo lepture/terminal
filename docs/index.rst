@@ -6,12 +6,19 @@
 Terminal: for Simple and Beautiful
 ==================================
 
-Terminal is designed for creating terminal-base tools, written in Python,
+Terminal is designed for creating terminal-based tools, written in Python,
 for developers who like simple and beautiful things.
 
 Python's standard **logging** and **argparse** (or optparse) modules are
 powerful, but the API is thoroughly ugly and hard to use. Terminal is
 designed to make life simpler and better.
+
+It contains everything you need for terminal:
+
+* Argv Parser
+* ANSI Colors
+* Prompts
+* Logging
 
 
 User's Guide
