@@ -3,7 +3,6 @@
 import re
 import sys
 import inspect
-from collections import OrderedDict
 
 
 class Command(object):
@@ -67,7 +66,7 @@ class Command(object):
         self._option_list = []
         self._command_list = []
 
-        self._results = OrderedDict()
+        self._results = {}
         self._rests = []
 
         self.add_default_options()
