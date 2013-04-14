@@ -313,7 +313,7 @@ class Command(object):
             if not self.parse_options(arg):
                 self._args_results.append(arg)
 
-        if hasattr(self, '_parent'):
+        if hasattr(self, '_parent') and isinstance(self._parent, Command):
             self._parent._args_results = self._args_results
 
         if self._command_func:

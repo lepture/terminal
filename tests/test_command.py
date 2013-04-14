@@ -30,6 +30,9 @@ class TestCommand(object):
             assert bar == 'lepture'
 
         program.parse('foo lepture --bar lepture')
+        program.parse('foo lepture --bar lepture baz')
+
+        assert 'baz' in program.args
 
         # subcommand itself
         program.action(program)
