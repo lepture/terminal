@@ -95,12 +95,47 @@ _colors = (
 
 
 class Color(object):
+    """
+    Color object for painters.
+
+    You should always use the high-level API of colors and styles,
+    such as :class:`red` and :class:`bold`.
+
+    But if you are so interested in this module, you are welcome to
+    use some advanced features::
+
+        c = Color('text')
+        print(c.bold.red.italic)
+
+    """
+
     def __init__(self, *items):
         self.items = items
 
         self.styles = []
         self.fgcolor = None
         self.bgcolor = None
+
+    def __getattr__(self, key):
+        if key.endswith('_bg'):
+            name = key[:-3]
+            if name not in _colors:
+                raise AttributeError("Color has no attribute '%s'" % key)
+            self.bgcolor = _colors.index(name)
+            return self
+
+        if key in _colors:
+            self.fgcolor = _colors.index(key)
+            return self
+
+        if key in _styles:
+            code = _styles.index(key)
+            self.styles.append(code + 1)
+            return self
+        try:
+            return super(Color, self).__getattr__(key)
+        except AttributeError:
+            raise AttributeError("Color has no attribute '%s'" % key)
 
     def __str__(self):
         return unicode(self).encode('utf-8')
