@@ -1,6 +1,9 @@
 Terminal: for Simple and Beautiful
 ==================================
 
+.. image:: https://travis-ci.org/lepture/terminal.png?branch=master
+        :target: https://travis-ci.org/lepture/terminal
+
 A better terminal tools for python.
 
 
