@@ -34,6 +34,7 @@ instructions for getting the most out of Terminal.
    intro
    install
    quickstart
+   advanced
 
 API Documentation
 -----------------
@@ -46,13 +47,14 @@ this part of the documentation is for you.
 
    api
 
-Contributor's Guide
--------------------
+Additional Notes
+----------------
 
-If you want to contribute to the project, this part of documentation is for you.
+Contribution guide, legal information and changelog are here.
 
 .. toctree::
    :maxdepth: 2
 
    contrib
+   changelog
    authors
