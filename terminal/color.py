@@ -10,6 +10,7 @@ import sys
 # Python 3
 if sys.version_info[0] == 3:
     string_type = str
+    unicode = str
 else:
     string_type = basestring
 

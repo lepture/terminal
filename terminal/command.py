@@ -243,7 +243,7 @@ class Command(object):
         else:
             doclines = []
         doclines = filter(lambda o: o.strip(), doclines)
-        doclines = map(lambda o: o.strip(), doclines)
+        doclines = list(map(lambda o: o.strip(), doclines))
 
         def find_description(arg):
             text = ':param %s:' % arg
