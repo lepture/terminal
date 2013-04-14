@@ -39,13 +39,13 @@ class Command(object):
     with the decorator feature::
 
         @command.action
-        def build(source='.'):
+        def build(output='_build'):
             '''
             generate the documentation.
 
             :param source: the source directory
             '''
-            pass
+            do_something(output)
 
     After defining the command, we can parse the command line argv::
 
@@ -214,15 +214,15 @@ class Command(object):
         If you prefer a decorator::
 
             @command.action
-            def foo(port=5000):
+            def server(port=5000):
                 '''
                 docstring as the description
 
                 :param port: description of port
                 '''
-                # server(port)
+                start_server(port)
 
-        It will auto generate a subcommand from the ``foo`` function.
+        It will auto generate a subcommand from the ``server`` method.
         """
 
         if isinstance(command, Command):
@@ -301,6 +301,7 @@ class Command(object):
             # parse subcommands
             for command in self._command_list:
                 if isinstance(command, Command) and command._name == cmd:
+                    command._parent = self
                     return command.parse(self._argv)
 
                 if inspect.isfunction(command) and command.__name__ == cmd:
@@ -311,6 +312,9 @@ class Command(object):
             self._argv = self._argv[1:]
             if not self.parse_options(arg):
                 self._args_results.append(arg)
+
+        if hasattr(self, '_parent'):
+            self._parent._args_results = self._args_results
 
         if self._command_func:
             self._command_func(**self._results)
