@@ -160,13 +160,11 @@ class Color(object):
             raise AttributeError("Color has no attribute '%s'" % key)
 
     def __str__(self):
-        if unicode == str:
-            # for python 3
-            return super(Color, self).__unicode__()
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
         text = ''.join(unicode(item) for item in self.items)
+
+        if unicode != str:
+            text = text.encode('utf-8')
+
         if not is_color_supported():
             return text
 
@@ -197,7 +195,7 @@ class Color(object):
         return text
 
     def __repr__(self):
-        return repr(unicode(self))
+        return repr(str(self))
 
     def __len__(self):
         return sum([len(item) for item in self.items])
