@@ -13,6 +13,6 @@ from .command import Command
 
 log = Logger()
 
-__homepage__ = 'http://lab.lepture.com/terminal/'
+__homepage__ = 'https://github.com/lepture/terminal'
 __author__ = 'Hsiaoming Yang <me@lepture.com>'
-__version__ = '0.1.0a1'
+__version__ = '0.1.0'

@@ -6,6 +6,10 @@ Terminal: for Simple and Beautiful
 
 A better terminal tools for python.
 
+Find documentation at `Read The Docs`_.
+
+.. _`Read The Docs`: https://terminal.readthedocs.org/
+
 
 Features
 --------
