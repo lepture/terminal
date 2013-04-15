@@ -106,6 +106,10 @@ class Logger(object):
         Start a nested log.
         """
 
+        if self._is_verbose:
+            # verbose log has no start method
+            return self
+
         self.writeln('start', *args)
         self._indent += 1
         return self
@@ -114,6 +118,10 @@ class Logger(object):
         """
         End a nested log.
         """
+
+        if self._is_verbose:
+            # verbose log has no end method
+            return self
 
         self._indent -= 1
         if not args:
