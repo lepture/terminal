@@ -13,14 +13,14 @@ class TestCommand(object):
         program.option('--key <keyword>', 'keywords')
 
         program.parse(
-            'foo -f -v --verbose --no-color bar -t tag --key=what'.split()
+            'foo -f -v --verbose --no-color bar -t tag --key=what'
         )
 
         assert program.get('-f')
         assert program.verbose
         assert program.tag == 'tag'
         assert program.color is False
-        assert program.keyword == 'what'
+        assert program.key == 'what'
 
     def test_action(self):
         program = Command('foo')

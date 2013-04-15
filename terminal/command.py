@@ -154,6 +154,7 @@ class Command(object):
         if isinstance(name, Option):
             option = name
         else:
+            name = name.strip()
             option = Option(
                 name=name, description=description,
                 action=action, resolve=resolve,
@@ -227,12 +228,16 @@ class Command(object):
                 self._results[shortname] = True
                 return True
 
-            if not tag and longname.startswith('--no-'):
+            if not tag and longname and longname.startswith('--no-'):
                 self._results[longname[5:]] = False
                 return True
 
-            if not tag:
+            if not tag and longname:
                 self._results[longname[2:]] = True
+                return True
+
+            if not tag and not longname:
+                self._results[shortname] = True
                 return True
 
             # has tag, it should has value
@@ -241,8 +246,13 @@ class Command(object):
                     value = self._argv[0]
                     self._argv = self._argv[1:]
 
-            tag = tag.strip()
-            self._results[tag[1:-1]] = option.to_python(value)
+            if not value:
+                raise RuntimeError('Missing value for: %s', name)
+
+            if not longname:
+                self._results[shortname] = option.to_python(value)
+            else:
+                self._results[longname[2:]] = option.to_python(value)
             return True
 
         return False
