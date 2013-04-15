@@ -5,6 +5,19 @@ import sys
 import inspect
 
 
+class Option(object):
+    def __init__(self, name, description=None, action=None, resolve=None):
+        self.name = name
+        self.description = description
+        self.action = action
+        self.resolve = resolve
+
+    def to_python(self, value):
+        if self.resolve:
+            return self.resolve(value)
+        return value
+
+
 class Command(object):
     """
     The command interface.
@@ -56,11 +69,13 @@ class Command(object):
         assert command.verbose is True
     """
 
-    def __init__(self, name, description=None, version=None, usage=None):
+    def __init__(self, name, description=None, version=None, usage=None,
+                 title=None):
         self._name = name
         self._description = description
         self._version = version
         self._usage = usage
+        self._title = title
 
         self._command_func = None
         self._option_list = []
@@ -106,7 +121,7 @@ class Command(object):
 
         return self._results.get(key)
 
-    def option(self, name, description=None, action=None):
+    def option(self, name, description=None, action=None, resolve=None):
         """
         Add or get option.
 
@@ -119,22 +134,40 @@ class Command(object):
         :param name: arguments of the option
         :param description: description of the option
         :param action: a function to be invoked
+        :param resolve: a function to resolve the data
 
         """
-        self._option_list.append((name, description, action))
+
+        if isinstance(name, Option):
+            option = name
+        else:
+            option = Option(
+                name=name, description=description,
+                action=action, resolve=resolve,
+            )
+
+        self._option_list.append(option)
         return self
 
     def add_default_options(self):
+        def print_help():
+            self.print_help()
+            return sys.exit(0)
         self.option(
             '-h, --help',
             'output the help menu',
-            self.print_help
+            print_help
         )
+
         if self._version:
+            def print_version():
+                self.print_version()
+                return sys.exit(0)
+
             self.option(
                 '-V, --version',
                 'output the version number',
-                self.print_version
+                print_version
             )
         return self
 
@@ -163,7 +196,7 @@ class Command(object):
 
         regex = re.compile(r'(-\w)?(?:\,\s*)?(--[\w\-]+)?(\s+<.*>)?')
         for option in self._option_list:
-            name = option[0].strip()
+            name = option.name
             m = regex.findall(name)
             if not m:
                 raise RuntimeError('Invalid Option: %s', name)
@@ -173,7 +206,7 @@ class Command(object):
             if arg not in (shortname, longname):
                 continue
 
-            action = option[2]
+            action = option.action
             if action:
                 action()
 
@@ -196,7 +229,7 @@ class Command(object):
                     self._argv = self._argv[1:]
 
             tag = tag.strip()
-            self._results[tag[1:-1]] = value
+            self._results[tag[1:-1]] = option.to_python(value)
             return True
 
         return False
@@ -325,8 +358,15 @@ class Command(object):
         Print the program version.
         """
 
-        print('  %s %s' % (self._name, self._version or ''))
-        return sys.exit(0)
+        if not self._version:
+            return self
+
+        if not self._title:
+            print('  %s %s' % (self._name, self._version))
+            return self
+
+        print('  %s (%s %s)' % (self._title, self._name, self._version))
+        return self
 
     def print_title(self, title):
         """
@@ -354,27 +394,31 @@ class Command(object):
         Print the help menu.
         """
 
-        print('\n  %s %s' % (self._name, self._version or ''))
+        print('\n  %s %s' % (self._title or self._name, self._version or ''))
 
         if self._usage:
             print('\n  %s' % self._usage)
         else:
+            cmd = self._name
+            if hasattr(self, '_parent') and isinstance(self._parent, Command):
+                cmd = '%s %s' % (self._parent._name, cmd)
+
             if self._command_list:
-                usage = 'Usage: %s <command> [option]' % self._name
+                usage = 'Usage: %s <command> [option]' % cmd
             else:
-                usage = 'Usage: %s [option]' % self._name
+                usage = 'Usage: %s [option]' % cmd
             print('\n  %s' % usage)
 
-        arglen = max(len(name) for name, desc, action in self._option_list)
+        arglen = max(len(o.name) for o in self._option_list)
         arglen += 2
 
         self.print_title('\n  Options:\n')
-        for name, desc, action in self._option_list:
-            print('    %s %s' % (_pad(name, arglen), desc or ''))
+        for o in self._option_list:
+            print('    %s %s' % (_pad(o.name, arglen), o.description or ''))
         print('')
 
         if not self._command_list:
-            return sys.exit(0)
+            return self
 
         self.print_title('\n  Commands:\n')
         for cmd in self._command_list:
@@ -388,7 +432,7 @@ class Command(object):
                 print('    %s %s' % (_pad(name, arglen), desc))
 
         print('')
-        return sys.exit(0)
+        return self
 
 
 def _pad(msg, length):
