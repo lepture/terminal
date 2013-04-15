@@ -6,6 +6,15 @@ import inspect
 
 
 class Option(object):
+    """
+    The Option object for Command.
+
+    :param name: the name of the option, usually like ``-v, --verbose``
+    :param description: the description of this option
+    :param action: a function to be invoke when this option is found
+    :param resolve: a function to transform the option data
+    """
+
     def __init__(self, name, description=None, action=None, resolve=None):
         self.name = name
         self.description = description
@@ -13,6 +22,10 @@ class Option(object):
         self.resolve = resolve
 
     def to_python(self, value):
+        """
+        Transform the option value to python data.
+        """
+
         if self.resolve:
             return self.resolve(value)
         return value

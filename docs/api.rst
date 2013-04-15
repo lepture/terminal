@@ -17,6 +17,11 @@ Command is the interface which you can create a command parser.
 .. autoclass:: Command
    :members:
 
+
+.. autoclass:: Option
+   :members:
+
+
 Logger
 ------
 

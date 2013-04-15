@@ -9,7 +9,7 @@ from __future__ import absolute_import
 from .color import *
 from .prompt import *
 from .log import Logger
-from .command import Command
+from .command import Command, Option
 
 log = Logger()
 
