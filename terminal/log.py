@@ -3,7 +3,6 @@
 from __future__ import absolute_import
 import sys
 import copy
-from . import color
 
 
 class Logger(object):
@@ -70,20 +69,9 @@ class Logger(object):
         """
 
         msg = ' '.join(args)
-        if level == 'start':
-            return color.magenta('=> ') + msg
-        if level == 'end':
-            return color.magenta('* ') + msg
-        m = {
-            'debug': 'gray',
-            'info': 'green',
-            'warn': 'yellow',
-            'error': 'red'
-        }
-        if level in m:
-            fn = getattr(color, m[level])
-            return '%s: %s' % (fn(level), msg)
-        return msg
+        if level not in ('start', 'end', 'debug', 'info', 'warn', 'error'):
+            return msg
+        return '%s: %s' % (level, msg)
 
     def writeln(self, level='info', *args):
         if not self._enable_verbose and self._is_verbose:
