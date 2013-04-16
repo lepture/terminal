@@ -21,10 +21,101 @@ class Option(object):
         self.action = action
         self.resolve = resolve
 
-    def to_python(self, value):
+        self.parse(name, description)
+
+    def parse(self, name, description):
+        """
+        Parse option name.
+
+        :param name: option's name
+        :param description: option's description
+
+        Parsing acceptable names:
+
+            * -f: shortname
+            * --force: longname
+            * -f, --force: shortname and longname
+            * -o <output>: shortname and a required value
+            * -o, --output [output]: shortname, longname and optional value
+
+        Parsing default value from description:
+
+            * source directory, default: src
+            * source directory, default: [src]
+            * source directory, default: <src>
+        """
+
+        name = name.strip()
+
+        if '<' in name:
+            self.required = True
+            self.boolean = False
+            name = name[:name.index('<')].strip()
+        elif '[' in name:
+            self.required = False
+            self.boolean = False
+            name = name[:name.index('[')].strip()
+        else:
+            self.required = False
+            self.boolean = True
+
+        regex = re.compile(r'(-\w)?(?:\,\s*)?(--[\w\-]+)?')
+
+        m = regex.findall(name)
+        if not m:
+            raise ValueError('Invalid Option: %s', name)
+
+        shortname, longname = m[0]
+
+        self.shortname = shortname
+        self.longname = longname
+
+        # parse store key
+        if longname and longname.startswith('--no-'):
+            self.key = longname[5:]
+        elif longname:
+            self.key = longname[2:]
+        else:
+            self.key = shortname
+
+        if self.boolean:
+            # boolean don't need to parse from description
+            if longname and longname.startswith('--no-'):
+                self.default = True
+            else:
+                self.default = False
+            return self
+
+        if not description:
+            self.default = None
+            return self
+
+        # parse default value from description
+        regex = re.compile(r'\sdefault:(.*)$')
+        m = regex.findall(description)
+        if not m:
+            self.default = None
+            return self
+
+        # if it has a default value, it is not required
+        self.required = False
+
+        value = m[0].strip()
+        if value.startswith('<') and value.endswith('>'):
+            value = value[1:-1]
+        elif value.startswith('[') and value.endswith(']'):
+            value = value[1:-1]
+
+        self.default = value.strip()
+        return self
+
+    def to_python(self, value=None):
         """
         Transform the option value to python data.
         """
+
+        if value is None:
+            return self.default
 
         if self.resolve:
             return self.resolve(value)
@@ -50,7 +141,15 @@ class Command(object):
     more options::
 
         command.option('-v, --verbose', 'show more logs')
+
+        # required option in < and >
         command.option('-o, --output <output>', 'the output file')
+
+        # optional option in [ and ]
+        command.option('-o, --output [output]', 'the output file')
+
+        # set a default value in description
+        command.option('-o, --source [dir]', 'the output file, default: src')
 
     Usually you will need a subcommand feature, add a subcommand like
     this::
@@ -209,36 +308,25 @@ class Command(object):
         if '=' in arg:
             arg, value = arg.split('=')
 
-        regex = re.compile(r'(-\w)?(?:\,\s*)?(--[\w\-]+)?(\s+<.*>)?')
         for option in self._option_list:
-            name = option.name
-            m = regex.findall(name)
-            if not m:
-                raise RuntimeError('Invalid Option: %s', name)
 
-            shortname, longname, tag = m[0]
-
-            if arg not in (shortname, longname):
+            if arg not in (option.shortname, option.longname):
                 continue
 
             action = option.action
             if action:
                 action()
 
-            if not tag and not longname:
-                self._results[shortname] = True
+            if option.key == option.shortname:
+                self._results[option.key] = True
                 return True
 
-            if not tag and longname and longname.startswith('--no-'):
-                self._results[longname[5:]] = False
+            if option.boolean and option.default:
+                self._results[option.key] = False
                 return True
 
-            if not tag and longname:
-                self._results[longname[2:]] = True
-                return True
-
-            if not tag and not longname:
-                self._results[shortname] = True
+            if option.boolean:
+                self._results[option.key] = True
                 return True
 
             # has tag, it should has value
@@ -248,12 +336,9 @@ class Command(object):
                     self._argv = self._argv[1:]
 
             if not value:
-                raise RuntimeError('Missing value for: %s', name)
+                raise RuntimeError('Missing value for: %s', option.name)
 
-            if not longname:
-                self._results[shortname] = option.to_python(value)
-            else:
-                self._results[longname[2:]] = option.to_python(value)
+            self._results[option.key] = option.to_python(value)
             return True
 
         return False
