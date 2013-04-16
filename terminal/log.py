@@ -28,6 +28,10 @@ class Logger(object):
         self._is_verbose = False
         self._enable_verbose = False
         self._enable_quiet = False
+
+        self.warn_count = 0
+        self.error_count = 0
+
         self.config(**kwargs)
 
     def config(self, **kwargs):
@@ -153,6 +157,7 @@ class Logger(object):
         The warn level log.
         """
 
+        self.warn_count += 1
         return self.writeln('warn', *args)
 
     def error(self, *args):
@@ -160,4 +165,5 @@ class Logger(object):
         The error level log.
         """
 
+        self.error_count += 1
         return self.writeln('error', *args)

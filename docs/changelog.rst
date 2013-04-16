@@ -20,6 +20,7 @@ Release date to be decided.
 * disable :class:`Logger.verbose` log on :class:`Logger.start` and :class:`Logger.end`
 * add **builtin.Command** and **builtin.Logger**
 * Option parser has required and boolean flags, Option parser has default value
+* record warn and error count on :class:`Logger`
 
 
 Version 0.1.0
