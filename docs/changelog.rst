@@ -18,6 +18,8 @@ Release date to be decided.
 * add :class:`Option`, use :class:`Option` on :class:`Command.option`
 * remove the colorful message on :class:`Logger.message`
 * disable :class:`Logger.verbose` log on :class:`Logger.start` and :class:`Logger.end`
+* add **builtin.Command** and **builtin.Logger**
+* Option parser has required and boolean flags, Option parser has default value
 
 
 Version 0.1.0

@@ -104,7 +104,7 @@ Create a simple command parser with :class:`Command`::
 Add some options::
 
     program.option('-f, --force', 'force to process')
-    program.option('-o, --output <output>', 'the output directory')
+    program.option('-o, --output [output]', 'the output directory')
 
 Let's make it work::
 
@@ -127,7 +127,7 @@ add subcommands via :class:`Command.action`::
     program.option('-v, --verbose', 'show more logs')
 
     subcommand = Command('build', 'build the site')
-    subcommand.option('-o, --output <output>', 'the output directory')
+    subcommand.option('-o, --output [output]', 'the output directory')
 
     program.action(subcommand)
 
