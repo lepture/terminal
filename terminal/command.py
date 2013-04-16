@@ -69,7 +69,7 @@ class Command(object):
             '''
             generate the documentation.
 
-            :param source: the source directory
+            :param output: the output directory
             '''
             do_something(output)
 

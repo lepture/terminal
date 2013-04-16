@@ -123,10 +123,12 @@ class Logger(object):
             # verbose log has no end method
             return self
 
-        self._indent -= 1
         if not args:
+            self._indent -= 1
             return self
-        return self.writeln('end', *args)
+        self.writeln('end', *args)
+        self._indent -= 1
+        return self
 
     def debug(self, *args):
         """
