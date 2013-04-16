@@ -406,12 +406,18 @@ class Command(object):
             desc = find_description(arg)
             if arg in kwargs:
                 value = kwargs[arg]
+
                 if value is True:
-                    cmd.option('--no-%s' % arg, desc)
+                    option = Option('--no-%s' % arg, desc)
                 elif value is False:
-                    cmd.option('-%s, --%s' % (arg[0], arg), desc)
+                    option = Option('-%s, --%s' % (arg[0], arg), desc)
                 else:
-                    cmd.option('-%s, --%s <%s>' % (arg[0], arg, arg), desc)
+                    option = Option(
+                        '-%s, --%s [%s]' % (arg[0], arg, arg), desc
+                    )
+                    option.default = value
+
+                cmd.option(option)
             else:
                 cmd.option('-%s, --%s <%s>' % (arg[0], arg, arg), desc)
 
