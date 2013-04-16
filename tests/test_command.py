@@ -9,7 +9,7 @@ class TestCommand(object):
         program.option('-v, --verbose', 'show more log')
         program.option('--no-color', 'output without color')
         program.option('-t, --tag <tag>', 'tag name')
-        program.option('-s <source>', 'source repo')
+        program.option('-s [source]', 'source repo')
         program.option('--key <keyword>', 'keywords')
 
         program.parse(
