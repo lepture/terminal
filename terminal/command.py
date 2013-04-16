@@ -97,7 +97,7 @@ class Command(object):
         self._results = {}
         self._args_results = []
 
-        self.add_default_options()
+        self._add_default_options()
 
     def __getitem__(self, key):
         return self._results.get(key)
@@ -163,10 +163,11 @@ class Command(object):
         self._option_list.append(option)
         return self
 
-    def add_default_options(self):
+    def _add_default_options(self):
         def print_help():
             self.print_help()
             return sys.exit(0)
+
         self.option(
             '-h, --help',
             'output the help menu',
