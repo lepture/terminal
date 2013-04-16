@@ -199,13 +199,13 @@ class Command(object):
         self._add_default_options()
 
     def __getitem__(self, key):
-        return self._results.get(key)
+        return self.get(key)
 
     def __getattr__(self, key):
         try:
             return super(Command, self).__getattr__(key)
         except AttributeError:
-            return self._results.get(key)
+            return self.get(key)
 
     def __call__(self, func):
         return self.action(func)
@@ -231,7 +231,17 @@ class Command(object):
             # we can also get ``verbose``: command.verbose
         """
 
-        return self._results.get(key)
+        value = self._results.get(key)
+        if value is not None:
+            return value
+
+        # get from option default value
+        option = filter(lambda o: o.key == key, self._option_list)
+        if not option:
+            raise ValueError('No such option: %s' % key)
+
+        option = option[0]
+        return option.default
 
     def option(self, name, description=None, action=None, resolve=None):
         """
@@ -460,6 +470,11 @@ class Command(object):
             self._argv = self._argv[1:]
             if not self.parse_options(arg):
                 self._args_results.append(arg)
+
+        for option in self._option_list:
+            # validate options
+            if option.required and option.key not in self._results:
+                raise RuntimeError('Option %s is required.' % option.name)
 
         if hasattr(self, '_parent') and isinstance(self._parent, Command):
             self._parent._args_results = self._args_results
