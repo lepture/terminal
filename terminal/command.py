@@ -353,6 +353,15 @@ class Command(object):
 
         return False
 
+    def validate_options(self):
+        """
+        Validate options
+        """
+        for option in self._option_list:
+            # validate options
+            if option.required and option.key not in self._results:
+                raise RuntimeError('Option %s is required.' % option.name)
+
     def action(self, command):
         """
         Add a subcommand.
@@ -471,10 +480,8 @@ class Command(object):
             if not self.parse_options(arg):
                 self._args_results.append(arg)
 
-        for option in self._option_list:
-            # validate options
-            if option.required and option.key not in self._results:
-                raise RuntimeError('Option %s is required.' % option.name)
+        # validate
+        self.validate_options()
 
         if hasattr(self, '_parent') and isinstance(self._parent, Command):
             self._parent._args_results = self._args_results
