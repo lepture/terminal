@@ -192,6 +192,7 @@ class Command(object):
         self._usage = usage
         self._title = title
 
+        self._parent = None
         self._command_func = None
         self._option_list = []
         self._command_list = []
@@ -208,7 +209,10 @@ class Command(object):
         try:
             return object.__getattribute__(self, key)
         except AttributeError:
-            return self.get(key)
+            try:
+                return self.get(key)
+            except ValueError:
+                raise AttributeError('No such attribute: %s' % key)
 
     def __call__(self, func):
         return self.action(func)
@@ -486,7 +490,7 @@ class Command(object):
         # validate
         self.validate_options()
 
-        if hasattr(self, '_parent') and isinstance(self._parent, Command):
+        if self._parent and isinstance(self._parent, Command):
             self._parent._args_results = self._args_results
 
         if self._command_func:
