@@ -40,8 +40,10 @@ Available styles::
     bold, faint, italic, underline, blink, overline, inverse
     conceal, strike
 
-But don't count on these styles, your terminal may be not able to show all of
-them.
+.. admonition:: Note:
+
+    But don't count on these styles, your terminal may be not able to
+    show all of them.
 
 
 Verbose logging
@@ -55,9 +57,9 @@ verbose feature, it could helps a lot::
 Now, let's play with the verbose log::
 
     >>> log.info('play with the log')
-    >>> log.verbose.info('a verbose log')
+    >>> log.verbose.info('a verbose log will not show')
     >>> log.config(verbose=True)
-    >>> log.verbose.info('a verbose log')
+    >>> log.verbose.info('a verbose log will show')
 
 We can also control the logging level::
 
@@ -115,10 +117,10 @@ Let's make it work::
 
 Save the code in a file (for example: foo.py), play in the terminal::
 
-    Username@Machine: ~$ python foo.py -h
-    Username@Machine: ~$ python foo.py -o src
-    Username@Machine: ~$ python foo.py --output=src
-    Username@Machine: ~$ python foo.py --output src
+    $ python foo.py -h
+    $ python foo.py -o src
+    $ python foo.py --output=src
+    $ python foo.py --output src
 
 However, when creating a terminal tool, a subcommand is usually needed, we can
 add subcommands via :class:`Command.action`::
@@ -138,5 +140,10 @@ add subcommands via :class:`Command.action`::
 
 Let's play with the more complex one::
 
-    Username@Machine: ~$ python foo.py -h
-    Username@Machine: ~$ python foo.py build -h
+    $ python foo.py -h
+    $ python foo.py build -h
+
+
+-----------------------------
+
+Ready for more? Check out the :ref:`advanced <advanced>` section.
