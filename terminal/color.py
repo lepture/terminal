@@ -213,12 +213,13 @@ class Color(object):
         return Color(s, self)
 
 
-def colorize(text, color):
+def colorize(text, color, background=False):
     """
     Colorize text with hex code.
 
     :param text: the text you want to paint
     :param color: a hex color or rgb color
+    :param background: decide to colorize background
 
     ::
 
@@ -234,7 +235,10 @@ def colorize(text, color):
         return c
 
     c = Color(text)
-    c.fgcolor = _color2ansi(color)
+    if background:
+        c.bgcolor = _color2ansi(color)
+    else:
+        c.fgcolor = _color2ansi(color)
     return c
 
 
