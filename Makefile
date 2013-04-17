@@ -6,7 +6,7 @@ test:
 repoter = html
 coverage:
 	@rm -f .coverage
-	@nosetests --with-cov terminal tests --cov-report=${repoter}
+	@nosetests --with-cov --cov-report=${repoter}
 
 clean: clean-build clean-pyc clean-docs
 
