@@ -21,6 +21,9 @@ class TestLogger(object):
         assert log._is_verbose is False
         assert log.verbose._is_verbose is True
 
+        log.verbose.start('no start')
+        log.verbose.end('no end')
+
     def test_log(self):
         log = Logger()
         log.debug('debug message')

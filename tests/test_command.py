@@ -1,4 +1,64 @@
-from terminal import Command
+from terminal import Command, Option
+from nose.tools import raises
+
+
+class TestOption(object):
+
+    @raises(ValueError)
+    def test_raise(self):
+        Option('invalid name')
+
+    def test_shortname(self):
+        # shortname
+        o = Option('-f')
+        assert o.key == '-f'
+        assert o.boolean
+        assert o.default is False
+        assert o.required is False
+
+    def test_longname(self):
+        o = Option('--force')
+
+        assert o.key == 'force'
+        assert o.boolean
+        assert o.default is False
+        assert o.required is False
+
+        o = Option('--no-color')
+        assert o.key == 'color'
+        assert o.boolean
+        assert o.default is True
+        assert o.required is False
+
+    def test_both_name(self):
+        o = Option('-f, --force')
+        assert o.key == 'force'
+        assert o.boolean
+        assert o.default is False
+        assert o.required is False
+
+    def test_non_boolean(self):
+        o = Option('-o, --output [dir]')
+        assert o.key == 'output'
+        assert o.boolean is False
+        assert o.default is None
+        assert o.required is False
+
+        o = Option('-o, --output <dir>')
+        assert o.required is True
+
+    def test_default(self):
+        o = Option('-o, --output <dir>', 'output directory, default: src')
+        assert o.default == 'src'
+
+        o = Option('-o, --output <dir>', 'directory default: [src]')
+        assert o.default == 'src'
+
+        o = Option('-o, --output <dir>', 'directory default: <src>')
+        assert o.default == 'src'
+
+        o = Option('-o, --output <dir>', 'default: <src>, output')
+        assert o.default is None
 
 
 class TestCommand(object):

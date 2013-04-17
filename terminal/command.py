@@ -67,6 +67,9 @@ class Option(object):
 
         shortname, longname = m[0]
 
+        if not shortname and not longname:
+            raise ValueError('Invalid Option: %s', name)
+
         self.shortname = shortname
         self.longname = longname
 
