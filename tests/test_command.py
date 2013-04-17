@@ -64,13 +64,16 @@ class TestOption(object):
 class TestCommand(object):
 
     def test_parse(self):
-        program = Command('foo')
+        program = Command('foo', version='1.0.0')
         program.option('-f', 'force')
         program.option('-v, --verbose', 'show more log')
         program.option('--no-color', 'output without color')
         program.option('-t, --tag <tag>', 'tag name')
         program.option('-s [source]', 'source repo')
         program.option('--key <keyword>', 'keywords')
+
+        program.print_version()
+        program.print_help()
 
         program.parse(
             'foo -f -v --verbose --no-color bar -t tag --key=what'
@@ -88,6 +91,9 @@ class TestCommand(object):
         @program.action
         def lepture(bar):
             assert bar == 'lepture'
+
+        program.print_version()
+        program.print_help()
 
         program.parse('foo lepture --bar lepture')
         program.parse('foo lepture --bar lepture baz')
