@@ -29,6 +29,10 @@ class Logger(_Logger):
             'error': 'red',
             'end': 'white',
         }
+
+        if level == 'error':
+            msg = color.red(msg)
+
         if level in _:
             fn = getattr(color, _[level])
             return '%s %s' % (fn('*'), msg)

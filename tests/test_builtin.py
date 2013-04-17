@@ -17,7 +17,9 @@ def test_log():
     log.info('hello test')
 
     log.start('start a level')
-    log.info('hell in a level')
+    log.info('info in a level')
+    log.warn('warn in a level')
+    log.error('error in a level')
     log.debug('debug info')
     log.verbose.info('will not print this')
     log.config(verbose=True)
