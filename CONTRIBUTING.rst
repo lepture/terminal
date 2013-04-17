@@ -30,8 +30,19 @@ case as simple as possible.
 Codebase
 --------
 
-The codebase of Terminal is highly linted and :pep:`8` compatible, you should follow
-the code style.
+The codebase of Terminal is highly tested and :pep:`8` compatible, as a way
+to guarantee functionality and keep all code written in a good style.
+
+You should follow the code style, and if you add any code, please add test
+cases for them.
+
+Here are some tips to make things simple:
+
+* When you cloned this repo, run ``make``, it will prepare everything for you
+* Check the code style with ``make link``
+* Check the test cases with ``make test``
+* Check test coverage with ``make coverage``
+
 
 Git Help
 --------
