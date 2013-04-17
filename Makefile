@@ -1,7 +1,7 @@
 .PHONY: clean-pyc clean-build docs
 
 all:
-	@pip install -r requirements.txt
+	@pip install -r dev-reqs.txt
 
 lint:
 	@flake8 terminal tests
