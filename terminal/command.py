@@ -206,7 +206,7 @@ class Command(object):
 
     def __getattr__(self, key):
         try:
-            return super(Command, self).__getattr__(key)
+            return object.__getattribute__(self, key)
         except AttributeError:
             return self.get(key)
 
@@ -239,7 +239,7 @@ class Command(object):
             return value
 
         # get from option default value
-        option = filter(lambda o: o.key == key, self._option_list)
+        option = list(filter(lambda o: o.key == key, self._option_list))
         if not option:
             raise ValueError('No such option: %s' % key)
 
