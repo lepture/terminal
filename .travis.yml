@@ -4,16 +4,8 @@ python:
     - "2.7"
     - "3.2"
 
-install:
-    - pip install nose-cov --use-mirrors
-    - pip install python-coveralls --use-mirrors
-
 script:
     - nosetests -s
-    - nosetests --with-cov terminal tests
-
-after_success:
-    - coveralls
 
 notifications:
     email: false
