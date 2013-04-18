@@ -76,9 +76,53 @@ bold and underline styles, we could::
         >>> terminal.red(u'中文')
 
 
-Chain Logging
--------------
-
-
 Decorator Command
 -----------------
+
+:class:`Command` is inspired by `commander.js`_, with the magic power of Python,
+we can do better. Let's have a look at the basic usage of Command::
+
+    from terminal import Command
+
+    program = Command('pip', description='.....', version='1.2.1')
+    program.option('--log [filename]', 'record the log into a file')
+    program.option(
+        '--timeout [seconds]',
+        'the socket timeout, default: 15',
+        resolve=int
+    )
+
+    # let's create a subcommand
+    installer = Command('install', description='install packages')
+    installer.option('-t, --target [dir]', 'Install packages into dir')
+
+    # let's add the subcommand
+    program.action(installer)
+
+    program.parse()
+
+
+The magic of decorator makes it easier to add a subcommand::
+
+    @program.action
+    def install(target=None):
+        """
+        install packages
+
+        :param target: Install packages into dir
+        """
+        do_something(target)
+
+The decorator will create a subcommand for you automatically. It will get the options
+from parameters, it will get the description from the docstring.
+
+.. _`commander.js`: https://github.com/visionmedia/commander.js
+
+
+Builtin Engines
+---------------
+
+We do like colorful things.
+
+.. image:: _static/terminal.png
+   :alt: terminal screen shot

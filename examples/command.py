@@ -17,7 +17,7 @@ program = MyCommand('terminal')
 
 # add actions
 
-subcommand = terminal.Command('sub')
+subcommand = terminal.Command('build', 'build the site')
 program.action(subcommand)
 
 
