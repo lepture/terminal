@@ -302,15 +302,6 @@ class Command(object):
             )
         return self
 
-    def add_log_options(self, verbose_func=None, quiet_func=None):
-        """
-        A helper for setting up log options
-        """
-
-        self.option('-v, --verbose', 'show more logs', verbose_func)
-        self.option('-q, --quiet', 'show less logs', quiet_func)
-        return self
-
     def parse_options(self, arg):
         """
         Parse options with the argv
