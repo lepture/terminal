@@ -1,19 +1,27 @@
 # coding: utf-8
 
-import __builtin__
 import getpass
 from terminal.prompt import prompt, password, confirm, choose
 
 
+def patch(fn):  # pragma: no cover
+    try:
+        import __builtin__
+        __builtin__.raw_input = fn
+    except ImportError:
+        import builtins
+        builtins.input = fn
+
+
 def test_prompt():
-    __builtin__.raw_input = lambda name: name
+    patch(lambda name: name)
     rv = prompt('what is your name', default='alice')
     assert rv == 'what is your name [alice]: '
 
     rv = prompt('what is your name')
     assert rv == 'what is your name: '
 
-    __builtin__.raw_input = lambda _: None
+    patch(lambda _: None)
     rv = prompt('what is your name', default='alice')
     assert rv == 'alice'
 
@@ -29,24 +37,24 @@ def test_password():
 
 
 def test_confirm():
-    __builtin__.raw_input = lambda name: 'y'
+    patch(lambda name: 'y')
     rv = confirm('foo')
     assert rv is True
 
-    __builtin__.raw_input = lambda name: 'n'
+    patch(lambda name: 'n')
     rv = confirm('foo')
     assert rv is False
 
-    __builtin__.raw_input = lambda name: None
+    patch(lambda name: None)
     rv = confirm('foo')
     assert rv is False
 
 
 def test_choose():
-    __builtin__.raw_input = lambda name: 'a'
+    patch(lambda name: 'a')
     rv = choose('foo', ['a', 'b'])
     assert rv == 'a'
 
-    __builtin__.raw_input = lambda name: 'none'
+    patch(lambda name: 'none')
     rv = choose('foo', ['a', 'b'])
     assert rv is None

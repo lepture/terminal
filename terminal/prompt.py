@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
-import string
+
 import getpass
+import sys
+
+# Python 3
+if sys.version_info[0] == 3:  # pragma: no cover
+    string_type = str
+else:
+    string_type = basestring
 
 
 def prompt(name, default=None):
@@ -14,7 +21,10 @@ def prompt(name, default=None):
     prompt = name + (default and ' [%s]' % default or '')
     prompt += name.endswith('?') and ' ' or ': '
     while True:
-        rv = raw_input(prompt)
+        try:
+            rv = raw_input(prompt)
+        except NameError:
+            rv = input(prompt)
         if rv:
             return rv
         if default is not None:
@@ -75,13 +85,13 @@ def choose(name, choices, default=None, resolve=None, no_choice=('none',)):
     """
 
     if not resolve:
-        resolve = string.lower
+        resolve = lambda o: o.lower()
 
     _choices = []
     options = []
 
     for choice in choices:
-        if isinstance(choice, basestring):
+        if isinstance(choice, string_type):
             options.append(choice)
         else:
             options.append("%s [%s]" % (choice[1], choice[0]))
