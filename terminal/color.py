@@ -8,14 +8,14 @@ import os
 import sys
 
 # Python 3
-if sys.version_info[0] == 3:
+if sys.version_info[0] == 3:  # pragma: no cover
     string_type = str
     unicode = str
 else:
     string_type = basestring
 
 
-def is_color_supported():
+def is_color_supported():  # pragma: no cover
     "Find out if your terminal environment supports color."
     # shinx.util.console
     if not hasattr(sys.stdout, 'isatty'):
@@ -39,7 +39,7 @@ def is_color_supported():
     return term in ('xterm', 'linux') or 'color' in term
 
 
-def is_256color_supported():
+def is_256color_supported():  # pragma: no cover
     "Find out if your terminal environment supports 256 color."
     if not is_color_supported():
         return False

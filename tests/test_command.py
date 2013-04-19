@@ -60,6 +60,18 @@ class TestOption(object):
         o = Option('-o, --output <dir>', 'default: <src>, output')
         assert o.default is None
 
+    def test_to_python(self):
+        o = Option('-o, --output [dir]', 'output directory, default: src')
+        assert o.to_python() == 'src'
+        assert o.to_python('foo') == 'foo'
+
+        o = Option(
+            '-n, --number [int]',
+            'output directory, default: 1',
+            resolve=int,
+        )
+        assert o.to_python('12') == 12
+
 
 class TestCommand(object):
 
@@ -89,7 +101,12 @@ class TestCommand(object):
         program = Command('foo')
 
         @program.action
-        def lepture(bar):
+        def lepture(bar, color=True, force=False, msg='hello'):
+            """
+            description of lepture subcommand.
+
+            :param bar: description of bar
+            """
             assert bar == 'lepture'
 
         program.print_version()

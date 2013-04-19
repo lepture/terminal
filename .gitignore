@@ -11,5 +11,5 @@ parts
 .DS_Store
 .installed.cfg
 docs/_build
-htmlcov/
+cover/
 .tox

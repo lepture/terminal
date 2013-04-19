@@ -9,10 +9,9 @@ lint:
 test:
 	@nosetests -s
 
-repoter = html
 coverage:
 	@rm -f .coverage
-	@nosetests --with-cov --cov-report=${repoter}
+	@nosetests --with-coverage --cover-package=terminal --cover-html
 
 clean: clean-build clean-pyc clean-docs
 
