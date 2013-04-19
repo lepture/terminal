@@ -1,4 +1,5 @@
 import terminal
+from nose.tools import raises
 
 
 def test_colorize():
@@ -9,6 +10,7 @@ def test_colorize():
     print(terminal.colorize('red', 'f00'))
     print(terminal.colorize('red', (255, 0, 0)))
     print(terminal.colorize('gray', (80, 80, 80)))
+    print(terminal.colorize('red', 'f00', True))
 
 
 def test_colors():
@@ -64,6 +66,19 @@ class TestColor(object):
         print(foo.green + 'bar')
         print('bar' + foo)
 
+        assert len(foo) == 3
+        assert len('bar' + foo) == 6
+
         bar = terminal.Color('foo')
         print(foo.green + bar)
         print(bar + foo)
+
+    @raises(TypeError)
+    def test_add_raise(self):
+        foo = terminal.Color('foo')
+        print(foo.green + 1)
+
+    @raises(TypeError)
+    def test_radd_raise(self):
+        foo = terminal.Color('foo')
+        print(1 + foo.green)

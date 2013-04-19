@@ -120,3 +120,31 @@ class TestCommand(object):
         # subcommand itself
         program.action(program)
         program.parse('foo foo lepture --bar lepture')
+
+    def test_call(self):
+        # for __call__
+        program = Command('foo')
+
+        @program
+        def bar():
+            return 'bar'
+
+        # bar is a pure function subcommand
+        program.parse('foo bar baz')
+        # bar can not parse args
+        assert 'baz' not in program.args
+
+    @raises(AttributeError)
+    def test_attr(self):
+        program = Command('foo')
+        program.bar
+
+    @raises(ValueError)
+    def test_get(self):
+        program = Command('foo')
+        program.get('bar')
+
+    def test_get_default(self):
+        program = Command('foo')
+        program.option('--output [dir]', 'output dir, default: site')
+        assert program.output == 'site'
