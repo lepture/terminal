@@ -11,7 +11,7 @@ script:
     - nosetests -s
 
 after_success:
-    - coverage run --source=coveralls setup.py -q nosetests
+    - coverage run --source=terminal setup.py -q nosetests
     - coveralls
 
 notifications:
