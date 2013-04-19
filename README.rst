@@ -3,6 +3,8 @@ Terminal: for Simple and Beautiful
 
 .. image:: https://travis-ci.org/lepture/terminal.png?branch=master
         :target: https://travis-ci.org/lepture/terminal
+.. image:: https://coveralls.io/repos/lepture/terminal/badge.png?branch=master
+        :target: https://coveralls.io/r/lepture/terminal
 
 A better terminal tools for python.
 
