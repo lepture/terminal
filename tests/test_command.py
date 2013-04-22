@@ -97,6 +97,14 @@ class TestCommand(object):
         assert program.color is False
         assert program.key == 'what'
 
+    def test_print(self):
+        program = Command('foo', title='foobar', version='1.0.0')
+        program.print_version()
+        program.print_help()
+
+        program._usage = 'foo [options]'
+        program.print_help()
+
     def test_action(self):
         program = Command('foo')
 
@@ -129,6 +137,8 @@ class TestCommand(object):
         def bar():
             return 'bar'
 
+        program.print_help()
+
         # bar is a pure function subcommand
         program.parse('foo bar baz')
         # bar can not parse args
@@ -148,3 +158,12 @@ class TestCommand(object):
         program = Command('foo')
         program.option('--output [dir]', 'output dir, default: site')
         assert program.output == 'site'
+
+    def test_run_parse(self):
+        program = Command('foo')
+
+        def func(**kwargs):
+            print('func')
+
+        program._command_func = func
+        program.parse()

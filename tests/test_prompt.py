@@ -58,3 +58,6 @@ def test_choose():
     patch(lambda name: 'none')
     rv = choose('foo', ['a', 'b'])
     assert rv is None
+
+    patch(lambda name: 'b')
+    choose('foo', ['a', ('b', 'bar')])

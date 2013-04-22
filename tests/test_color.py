@@ -48,6 +48,11 @@ def test_styles():
     print(terminal.bold(terminal.underline('bold and underline style')))
 
 
+@raises(ValueError)
+def test_hex2ansi():
+    terminal.hex2ansi('ffbbccd')
+
+
 class TestColor(object):
     def test_property(self):
         s = terminal.Color('text')
@@ -60,6 +65,11 @@ class TestColor(object):
 
         s.bgcolor = 'd64'
         print(s)
+
+    @raises(AttributeError)
+    def test_property_raise(self):
+        s = terminal.Color('text')
+        print(s.unknown)
 
     def test_plus(self):
         foo = terminal.Color('foo')
