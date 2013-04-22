@@ -119,10 +119,47 @@ from parameters, it will get the description from the docstring.
 .. _`commander.js`: https://github.com/visionmedia/commander.js
 
 
+Options
+~~~~~~~
+
+If you defined a subcommand with the decorator magic, :class:`Command` will auto detect
+if the option is required or not, if it is a Boolean or not.
+
+If you do like the raw option, we can learn from these examples::
+
+    # boolean, default is False
+    program.option('-f, --force', 'force to do something')
+    # program.force is False
+
+    # boolean, default is True
+    program.option('-C, --no-color', 'do not paint')
+    # program.color is True
+
+    # required, no default value
+    program.option('-o, --output <dir>', 'output directory')
+
+    # required, default is dist
+    program.option('-o, --output <dir>', 'output directory, default: dist')
+    # if it has a default value, it is optional actually.
+
+    # optional, no default value
+    program.option('-o, --output [dir]', 'output directory')
+
+
+You can learn from the example that required options are surrounded by ``<>``, and
+optional ones are surrounded by ``[]``. The parser can parse a default value from the
+description.
+
+
 Builtin Engines
 ---------------
 
-We do like colorful things.
+We do like colorful things, but we are to lazy to do any customization. The default
+one is pretty enough, (if you don't think so, let's improve it).
 
 .. image:: _static/terminal.png
    :alt: terminal screen shot
+
+Get the power from **terminal.builtin**::
+
+    from terminal.builtin import Command, log
