@@ -155,11 +155,11 @@ class Color(object):
             self.styles.append(code + 1)
             return self
         try:
-            return super(Color, self).__getattr__(key)
+            return object.__getattribute__(self, key)
         except AttributeError:
             raise AttributeError("Color has no attribute '%s'" % key)
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         text = ''.join(unicode(item) for item in self.items)
 
         if unicode != str:
