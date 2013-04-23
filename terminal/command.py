@@ -555,7 +555,7 @@ class Command(object):
         if not self._command_list:
             return self
 
-        self.print_title('\n  Commands:\n')
+        self.print_title('  Commands:\n')
         for cmd in self._command_list:
             if isinstance(cmd, Command):
                 name = _pad(cmd._name, arglen)
@@ -563,7 +563,15 @@ class Command(object):
                 print('    %s %s' % (_pad(name, arglen), desc))
             elif inspect.isfunction(cmd):
                 name = _pad(cmd.__name__, arglen)
-                desc = cmd.__doc__
+
+                if cmd.__doc__:
+                    doclines = cmd.__doc__.splitlines()
+                else:
+                    doclines = []
+
+                doclines = filter(lambda o: o.strip(), doclines)
+                doclines = list(map(lambda o: o.strip(), doclines))
+                desc = doclines[0]
                 print('    %s %s' % (_pad(name, arglen), desc))
 
         print('')
