@@ -414,7 +414,8 @@ class Command(object):
         if doclines:
             desc = doclines[0]
 
-        cmd = Command(func.__name__, desc)
+        # use self.__class__ instead of Command for inherit
+        cmd = self.__class__(func.__name__, desc)
 
         defaults = defaults or []
         kwargs = dict(zip(*[reversed(i) for i in (args, defaults)]))
