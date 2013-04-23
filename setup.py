@@ -26,7 +26,7 @@ setup(
     long_description=open('README.rst').read(),
     license=open('LICENSE').read(),
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'License :: OSI Approved :: BSD License',
         'Operating System :: MacOS',

@@ -11,7 +11,7 @@ Here you can see the full list of changes between each Terminal release.
 Version 0.2.0
 -------------
 
-Release date to be decided.
+Released on April 23, 2013. Beta release.
 
 * various bugfixed
 * don't sys.exit on :class:`Command.print_help` and :class:`Command.print_version`
@@ -26,4 +26,4 @@ Release date to be decided.
 Version 0.1.0
 -------------
 
-First public release.
+First public preview release.
