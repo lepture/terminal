@@ -14,6 +14,7 @@ Version 0.2.1
 * various bugfixed
 * delete an newline in print help
 * remove support for pure function as action
+* config option in docstring
 
 Version 0.2.0
 -------------

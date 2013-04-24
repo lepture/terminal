@@ -116,6 +116,29 @@ The magic of decorator makes it easier to add a subcommand::
 The decorator will create a subcommand for you automatically. It will get the options
 from parameters, it will get the description from the docstring.
 
+The example above equals something like::
+
+    def install(target=None):
+        do_something(target)
+
+    installer = Command('install', description='install packages', func=install)
+    installer.option('-t, --target [target]', 'Install packages into dir')
+    program.action(installer)
+
+The option ``-t, --target [target]`` is generated from params and docstring. You can
+define the option yourself::
+
+    @program.action
+    def install(target=None):
+        """
+        install packages
+
+        :param target: Install packages into dir
+        :option target: -g, --target [dir]
+        """
+        do_something(target)
+
+
 .. _`commander.js`: https://github.com/visionmedia/commander.js
 
 
