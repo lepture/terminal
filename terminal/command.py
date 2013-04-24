@@ -352,7 +352,7 @@ class Command(object):
                     self._argv = self._argv[1:]
 
             if not value:
-                raise RuntimeError('Missing value for: %s', option.name)
+                raise RuntimeError('Missing value for: %s' % option.name)
 
             self._results[option.key] = option.to_python(value)
             return True
