@@ -288,7 +288,7 @@ class Command(object):
         return self
 
     def _add_default_options(self):
-        def print_help():
+        def print_help():  # pragma: no cover
             self.print_help()
             return sys.exit(0)
 
@@ -299,7 +299,7 @@ class Command(object):
         )
 
         if self._version:
-            def print_version():
+            def print_version():  # pragma: no cover
                 self.print_version()
                 return sys.exit(0)
 

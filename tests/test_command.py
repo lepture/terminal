@@ -109,6 +109,21 @@ class TestCommand(object):
         program._usage = 'foo [options]'
         program.print_help()
 
+    def test_add_action(self):
+        program = Command('foo')
+
+        @program.action
+        def hello(bar):
+            """
+            description of hello
+
+            :param bar: description of bar
+            :option bar: -a, --bar <name>
+            """
+            assert bar == 'baz'
+
+        program.parse('foo hello -a baz')
+
     def test_action(self):
         program = Command('foo')
 
