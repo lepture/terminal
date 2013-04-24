@@ -8,23 +8,23 @@ import os
 import sys
 
 # Python 3
-if sys.version_info[0] == 3:  # pragma: no cover
+if sys.version_info[0] == 3:
     string_type = str
     unicode = str
 else:
     string_type = basestring
 
 
-def is_color_supported():  # pragma: no cover
+def is_color_supported():
     "Find out if your terminal environment supports color."
     # shinx.util.console
     if not hasattr(sys.stdout, 'isatty'):
         return False
 
-    if not sys.stdout.isatty():
+    if not sys.stdout.isatty() and 'TERMINAL-TEST' not in os.environ:
         return False
 
-    if sys.platform == 'win32':
+    if sys.platform == 'win32':  # pragma: no cover
         try:
             import colorama
             colorama.init()
@@ -39,7 +39,7 @@ def is_color_supported():  # pragma: no cover
     return term in ('xterm', 'linux') or 'color' in term
 
 
-def is_256color_supported():  # pragma: no cover
+def is_256color_supported():
     "Find out if your terminal environment supports 256 color."
     if not is_color_supported():
         return False
@@ -159,7 +159,7 @@ class Color(object):
         except AttributeError:
             raise AttributeError("Color has no attribute '%s'" % key)
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self):
         text = ''.join(unicode(item) for item in self.items)
 
         if unicode != str:

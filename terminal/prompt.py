@@ -4,7 +4,7 @@ import getpass
 import sys
 
 # Python 3
-if sys.version_info[0] == 3:  # pragma: no cover
+if sys.version_info[0] == 3:
     string_type = str
 else:
     string_type = basestring
