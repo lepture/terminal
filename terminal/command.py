@@ -135,10 +135,12 @@ class Command(object):
     """
     The command interface.
 
-    :param name: program name
+    :param name: name of the program
     :param description: description of the program
     :param version: version of the program
     :param usage: usage of the program
+    :param title: title of the program
+    :param func: command function to be invoked
 
     Create a :class:`Command` instance in your cli file::
 
@@ -191,15 +193,15 @@ class Command(object):
     """
 
     def __init__(self, name, description=None, version=None, usage=None,
-                 title=None):
+                 title=None, func=None):
         self._name = name
         self._description = description
         self._version = version
         self._usage = usage
         self._title = title
+        self._command_func = func
 
         self._parent = None
-        self._command_func = None
         self._option_list = []
         self._command_list = []
 
@@ -472,9 +474,6 @@ class Command(object):
                 if isinstance(command, Command) and command._name == cmd:
                     command._parent = self
                     return command.parse(self._argv)
-
-                if inspect.isfunction(command) and command.__name__ == cmd:
-                    return command()
 
         while self._argv:
             arg = self._argv[0]

@@ -143,6 +143,13 @@ class TestCommand(object):
 
         program.print_help()
 
+    def test_func(self):
+        def bar():
+            return 'bar'
+
+        program = Command('foo', func=bar)
+        program.parse('foo')
+
     @raises(RuntimeError)
     def test_missing_option(self):
         program = Command('foo')
