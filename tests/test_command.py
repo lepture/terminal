@@ -4,6 +4,10 @@ from nose.tools import raises
 
 class TestOption(object):
 
+    def test_attr(self):
+        o = Option('-f')
+        assert repr(o) == '<Option "-f">'
+
     @raises(ValueError)
     def test_raise(self):
         Option('invalid name')
@@ -138,6 +142,18 @@ class TestCommand(object):
             return 'bar'
 
         program.print_help()
+
+    @raises(RuntimeError)
+    def test_missing_option(self):
+        program = Command('foo')
+        program.option('-o, --output <dir>', 'output directory')
+        program.parse('foo -o')
+
+    @raises(RuntimeError)
+    def test_missing_required(self):
+        program = Command('foo')
+        program.option('-o, --output <dir>', 'output directory')
+        program.parse('foo')
 
     @raises(AttributeError)
     def test_attr(self):

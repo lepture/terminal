@@ -23,6 +23,12 @@ class Option(object):
 
         self.parse(name, description)
 
+    def __str__(self):
+        return self.key
+
+    def __repr__(self):
+        return '<Option "%s">' % str(self)
+
     def parse(self, name, description):
         """
         Parse option name.
@@ -453,6 +459,7 @@ class Command(object):
 
         self._argv = argv[1:]
         if not self._argv:
+            self.validate_options()
             if self._command_func:
                 self._command_func(**self._results)
             return self
