@@ -407,12 +407,16 @@ class Command(object):
         doclines = filter(lambda o: o.strip(), doclines)
         doclines = list(map(lambda o: o.strip(), doclines))
 
-        def find_description(arg):
-            text = ':param %s:' % arg
-            for line in doclines:
-                if line.startswith(text):
-                    return line.replace(text, '').strip()
-            return None
+        params = {}
+        options = {}
+
+        for line in doclines:
+            if line.startswith(':param '):
+                name, desc = line[7:].split(':', 1)
+                params[name.strip()] = desc.strip()
+            elif line.startswith(':option '):
+                name, desc = line[8:].split(':', 1)
+                options[name.strip()] = desc.strip()
 
         desc = None
         if doclines:
@@ -425,23 +429,25 @@ class Command(object):
         kwargs = dict(zip(*[reversed(i) for i in (args, defaults)]))
 
         for arg in args:
-            desc = find_description(arg)
+            desc = params.get(arg, None)
+            name = options.get(arg, None)
             if arg in kwargs:
                 value = kwargs[arg]
-
                 if value is True:
-                    option = Option('--no-%s' % arg, desc)
+                    name = name or '--no-%s' % arg
+                    option = Option(name, desc)
                 elif value is False:
-                    option = Option('-%s, --%s' % (arg[0], arg), desc)
+                    name = name or '-%s, --%s' % (arg[0], arg)
+                    option = Option(name, desc)
                 else:
-                    option = Option(
-                        '-%s, --%s [%s]' % (arg[0], arg, arg), desc
-                    )
+                    name = name or '-%s, --%s [%s]' % (arg[0], arg, arg)
+                    option = Option(name, desc)
                     option.default = value
 
                 cmd.option(option)
             else:
-                cmd.option('-%s, --%s <%s>' % (arg[0], arg, arg), desc)
+                name = name or '-%s, --%s <%s>' % (arg[0], arg, arg)
+                cmd.option(name, desc)
 
         cmd._command_func = func
         self._command_list.append(cmd)
