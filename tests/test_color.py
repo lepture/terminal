@@ -1,3 +1,4 @@
+import os
 import terminal
 from nose.tools import raises
 
@@ -53,23 +54,73 @@ def test_hex2ansi():
     terminal.hex2ansi('ffbbccd')
 
 
+@raises(ValueError)
+def test_raise_colorize():
+    print(terminal.colorize('text', {'foo': 'bar'}))
+
+
+def test_256color():
+    env = Environ()
+    env.enable_256color()
+
+    print(terminal.gray('gray color'))
+    print(terminal.gray_bg('gray background'))
+
+    env.reset()
+
+
+class Environ(object):
+    def __init__(self):
+        self.term = os.environ.get('TERM', None)
+
+    def enable_256color(self):
+        os.environ['TERMINAL-TEST'] = 'true'
+        os.environ['COLORTERM'] = 'true'
+        os.environ['TERM'] = 'xterm-256color'
+
+    def enable_color(self):
+        os.environ['TERMINAL-TEST'] = 'true'
+        os.environ['TERM'] = 'xterm'
+
+    def reset(self):
+        del os.environ['TERMINAL-TEST']
+        if 'COLORTERM' in os.environ:
+            del os.environ['COLORTERM']
+        if self.term:
+            os.environ['TERM'] = self.term
+
+
 class TestColor(object):
     def test_property(self):
+        env = Environ()
+        env.enable_color()
+
         s = terminal.Color('text')
         print(s.bold.red.underline)
         print(s.green_bg)
+        env.reset()
 
+    def test_set_attribute(self):
+        env = Environ()
+        env.enable_256color()
         s = terminal.Color('text')
         s.bgcolor = 'red'
+        s.fgcolor = 'white'
         print(s)
 
         s.bgcolor = 'd64'
         print(s)
+        env.reset()
 
     @raises(AttributeError)
     def test_property_raise(self):
         s = terminal.Color('text')
         print(s.unknown)
+
+    @raises(AttributeError)
+    def test_unknown_bg(self):
+        s = terminal.Color('text')
+        print(s.unknown_bg)
 
     def test_plus(self):
         foo = terminal.Color('foo')
@@ -92,3 +143,8 @@ class TestColor(object):
     def test_radd_raise(self):
         foo = terminal.Color('foo')
         print(1 + foo.green)
+
+    def test_repr(self):
+        foo = terminal.Color('foo')
+        foo.fgcolor = 'red'
+        assert repr(foo) == repr(str(foo))
