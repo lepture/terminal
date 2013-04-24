@@ -8,6 +8,13 @@ Here you can see the full list of changes between each Terminal release.
 .. module:: terminal
 
 
+Version 0.2.1
+-------------
+
+* various bugfixed
+* delete an newline in print help
+* remove support for pure function as action
+
 Version 0.2.0
 -------------
 
