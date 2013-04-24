@@ -391,10 +391,6 @@ class Command(object):
         # it is a function
         func = command
         args, varargs, keywords, defaults = inspect.getargspec(func)
-        if not args:
-            # a pure function
-            self._command_list.append(func)
-            return self
 
         if func.__doc__:
             doclines = func.__doc__.splitlines()
@@ -561,18 +557,6 @@ class Command(object):
             if isinstance(cmd, Command):
                 name = _pad(cmd._name, arglen)
                 desc = cmd._description or ''
-                print('    %s %s' % (_pad(name, arglen), desc))
-            elif inspect.isfunction(cmd):
-                name = _pad(cmd.__name__, arglen)
-
-                if cmd.__doc__:
-                    doclines = cmd.__doc__.splitlines()
-                else:
-                    doclines = []
-
-                doclines = filter(lambda o: o.strip(), doclines)
-                doclines = list(map(lambda o: o.strip(), doclines))
-                desc = doclines[0]
                 print('    %s %s' % (_pad(name, arglen), desc))
 
         print('')

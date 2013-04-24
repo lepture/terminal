@@ -139,11 +139,6 @@ class TestCommand(object):
 
         program.print_help()
 
-        # bar is a pure function subcommand
-        program.parse('foo bar baz')
-        # bar can not parse args
-        assert 'baz' not in program.args
-
     @raises(AttributeError)
     def test_attr(self):
         program = Command('foo')
