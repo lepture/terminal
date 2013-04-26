@@ -193,13 +193,14 @@ class Command(object):
     """
 
     def __init__(self, name, description=None, version=None, usage=None,
-                 title=None, func=None):
+                 title=None, func=None, help_footer=None):
         self._name = name
         self._description = description
         self._version = version
         self._usage = usage
         self._title = title
         self._command_func = func
+        self._help_footer = help_footer
 
         self._parent = None
         self._option_list = []
@@ -561,17 +562,20 @@ class Command(object):
             print('    %s %s' % (_pad(o.name, arglen), o.description or ''))
         print('')
 
-        if not self._command_list:
-            return self
+        if self._command_list:
+            self.print_title('  Commands:\n')
+            for cmd in self._command_list:
+                if isinstance(cmd, Command):
+                    name = _pad(cmd._name, arglen)
+                    desc = cmd._description or ''
+                    print('    %s %s' % (_pad(name, arglen), desc))
 
-        self.print_title('  Commands:\n')
-        for cmd in self._command_list:
-            if isinstance(cmd, Command):
-                name = _pad(cmd._name, arglen)
-                desc = cmd._description or ''
-                print('    %s %s' % (_pad(name, arglen), desc))
+            print('')
 
-        print('')
+        if self._help_footer:
+            print(self._help_footer)
+            print('')
+
         return self
 
 

@@ -8,13 +8,17 @@ Here you can see the full list of changes between each Terminal release.
 .. module:: terminal
 
 
-Version 0.2.1
+Version 0.3.0
 -------------
+
+Release date to be decided.
 
 * various bugfixed
 * delete an newline in print help
 * remove support for pure function as action
 * config option in docstring
+* add help_footer option
+
 
 Version 0.2.0
 -------------

@@ -109,6 +109,15 @@ class TestCommand(object):
         program._usage = 'foo [options]'
         program.print_help()
 
+    def test_help_footer(self):
+        footers = [
+            'Examples:',
+            '',
+            '  $ terminal -h'
+        ]
+        program = Command('foo', help_footer='\n'.join(footers))
+        program.print_help()
+
     def test_add_action(self):
         program = Command('foo')
 
