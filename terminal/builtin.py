@@ -7,7 +7,7 @@ from .log import Logger as _Logger
 
 class Logger(_Logger):
     def message(self, level, *args):
-        msg = ' '.join(args)
+        msg = ' '.join((str(o) for o in args))
 
         if level == 'start':
             return color.bold(msg)
