@@ -11,7 +11,7 @@ Here you can see the full list of changes between each Terminal release.
 Version 0.3.0
 -------------
 
-Release date to be decided.
+Released on May 7, 2013. Beta release.
 
 * various bugfixed
 * delete an newline in print help
