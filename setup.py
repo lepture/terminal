@@ -28,6 +28,8 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved',
         'License :: OSI Approved :: BSD License',
         'Operating System :: MacOS',
         'Operating System :: POSIX',
@@ -36,7 +38,9 @@ setup(
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: Implementation',
         'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy',
     ],
     **kwargs
 )
