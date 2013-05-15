@@ -167,6 +167,15 @@ class TestCommand(object):
 
         program.print_help()
 
+    def test_subcommand(self):
+        program = Command('foo')
+
+        @program.subcommand
+        def bar():
+            return 'bar'
+
+        program.print_help()
+
     def test_func(self):
         def bar():
             return 'bar'

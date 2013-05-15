@@ -454,6 +454,10 @@ class Command(object):
         self._command_list.append(cmd)
         return self
 
+    def subcommand(self, command):
+        """Alias for Command.action."""
+        return self.action(command)
+
     def parse(self, argv=None):
         """
         Parse argv of terminal
