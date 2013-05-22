@@ -563,7 +563,9 @@ class Command(object):
                 usage = 'Usage: %s <command> [option]' % cmd
             else:
                 usage = 'Usage: %s [option]' % cmd
-            print('\n  %s' % usage)
+
+            pos = ' '.join(['<%s>' % name for name in self._positional_list])
+            print('\n  %s %s' % (usage, pos))
 
         arglen = max(len(o.name) for o in self._option_list)
         arglen += 2

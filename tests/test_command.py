@@ -80,7 +80,7 @@ class TestOption(object):
 class TestCommand(object):
 
     def test_parse(self):
-        program = Command('foo', version='1.0.0')
+        program = Command('parse', version='1.0.0')
         program.option('-f', 'force')
         program.option('-v, --verbose', 'show more log')
         program.option('--no-color', 'output without color')
@@ -92,7 +92,7 @@ class TestCommand(object):
         program.print_help()
 
         program.parse(
-            'foo -f -v --verbose --no-color bar -t tag --key=what'
+            'parse -f -v --verbose --no-color bar -t tag --key=what'
         )
 
         assert program.get('-f')
@@ -102,11 +102,11 @@ class TestCommand(object):
         assert program.key == 'what'
 
     def test_print(self):
-        program = Command('foo', title='foobar', version='1.0.0')
+        program = Command('print', title='foobar', version='1.0.0')
         program.print_version()
         program.print_help()
 
-        program._usage = 'foo [options]'
+        program._usage = 'print [options]'
         program.print_help()
 
     def test_help_footer(self):
@@ -115,11 +115,11 @@ class TestCommand(object):
             '',
             '  $ terminal -h'
         ]
-        program = Command('foo', help_footer='\n'.join(footers))
+        program = Command('footer', help_footer='\n'.join(footers))
         program.print_help()
 
     def test_add_action(self):
-        program = Command('foo')
+        program = Command('add-action')
 
         @program.action
         def hello(bar):
@@ -128,10 +128,11 @@ class TestCommand(object):
             """
             assert bar == 'baz'
 
-        program.parse('foo hello baz')
+        program.parse('add-action hello baz')
+        program.print_help()
 
     def test_action(self):
-        program = Command('foo')
+        program = Command('action')
 
         @program.action
         def lepture(bar=None, color=True, force=False, msg='hello'):
@@ -146,18 +147,18 @@ class TestCommand(object):
         program.print_version()
         program.print_help()
 
-        program.parse('foo lepture --bar lepture')
-        program.parse('foo lepture --bar lepture baz')
+        program.parse('action lepture --bar lepture')
+        program.parse('action lepture --bar lepture baz')
 
         assert 'baz' in program.args
 
         # subcommand itself
         program.action(program)
-        program.parse('foo foo lepture --bar lepture')
+        program.parse('action action lepture --bar lepture')
 
     def test_call(self):
         # for __call__
-        program = Command('foo')
+        program = Command('call')
 
         @program
         def bar():
@@ -166,7 +167,7 @@ class TestCommand(object):
         program.print_help()
 
     def test_subcommand(self):
-        program = Command('foo')
+        program = Command('subcommand')
 
         @program.subcommand
         def bar():
@@ -178,38 +179,38 @@ class TestCommand(object):
         def bar():
             return 'bar'
 
-        program = Command('foo', func=bar)
-        program.parse('foo')
+        program = Command('func', func=bar)
+        program.parse('func')
 
     @raises(RuntimeError)
     def test_missing_option(self):
-        program = Command('foo')
+        program = Command('missing-option')
         program.option('-o, --output <dir>', 'output directory')
-        program.parse('foo -o')
+        program.parse('missing-option -o')
 
     @raises(RuntimeError)
     def test_missing_required(self):
-        program = Command('foo')
+        program = Command('missing-required')
         program.option('-o, --output <dir>', 'output directory')
-        program.parse('foo')
+        program.parse('missing-required')
 
     @raises(AttributeError)
     def test_attr(self):
-        program = Command('foo')
+        program = Command('attr')
         program.bar
 
     @raises(ValueError)
     def test_get(self):
-        program = Command('foo')
+        program = Command('get')
         program.get('bar')
 
     def test_get_default(self):
-        program = Command('foo')
+        program = Command('get-default')
         program.option('--output [dir]', 'output dir, default: site')
         assert program.output == 'site'
 
     def test_run_parse(self):
-        program = Command('foo')
+        program = Command('run-parse')
 
         def func(**kwargs):
             print('func')
