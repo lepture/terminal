@@ -239,6 +239,9 @@ class Command(object):
 
         return self._args_results
 
+    def keys(self):
+        return self._results.keys()
+
     def get(self, key):
         """
         Get parsed result.

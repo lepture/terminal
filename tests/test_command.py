@@ -225,3 +225,16 @@ class TestCommand(object):
         program.print_help()
         program.parse('arguments foo')
         assert program.name == 'foo'
+
+    def test_as_container(self):
+        program = Command('container', version='1.0.0')
+        program.option('-f', 'force')
+        program.option('-v, --verbose', 'show more log')
+        program.option('--no-color', 'output without color')
+        program.option('-t, --tag <tag>', 'tag name')
+        program.option('-s [source]', 'source repo')
+        program.option('--key <keyword>', 'keywords')
+        program.parse(
+            'container -f -v --verbose --no-color bar -t tag --key=what'
+        )
+        assert 'verbose' in dict(program)
