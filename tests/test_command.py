@@ -125,6 +125,8 @@ class TestCommand(object):
         def hello(bar):
             """
             description of hello
+
+            usage: hello <bar>
             """
             assert bar == 'baz'
 

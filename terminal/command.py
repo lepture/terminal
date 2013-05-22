@@ -415,9 +415,12 @@ class Command(object):
 
         params = {}
         options = {}
+        usage = None
 
         for line in doclines:
-            if line.startswith(':param '):
+            if line.startswith('usage:'):
+                usage = line[6:].strip()
+            elif line.startswith(':param '):
                 name, desc = line[7:].split(':', 1)
                 params[name.strip()] = desc.strip()
             elif line.startswith(':option '):
@@ -429,7 +432,7 @@ class Command(object):
             desc = doclines[0]
 
         # use self.__class__ instead of Command for inherit
-        cmd = self.__class__(func.__name__, desc)
+        cmd = self.__class__(func.__name__, desc, usage=usage)
 
         defaults = defaults or []
         kwargs = dict(zip(*[reversed(i) for i in (args, defaults)]))
