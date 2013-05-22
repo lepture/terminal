@@ -135,12 +135,16 @@ class Command(object):
     """
     The command interface.
 
+    .. versionadded:: 0.4
+        The `arguments` parameters were added.
+
     :param name: name of the program
     :param description: description of the program
     :param version: version of the program
     :param usage: usage of the program
     :param title: title of the program
     :param func: command function to be invoked
+    :param arguments: positional arguments
 
     Create a :class:`Command` instance in your cli file::
 
@@ -193,7 +197,7 @@ class Command(object):
     """
 
     def __init__(self, name, description=None, version=None, usage=None,
-                 title=None, func=None, help_footer=None):
+                 title=None, func=None, help_footer=None, arguments=None):
         self._name = name
         self._description = description
         self._version = version
@@ -201,11 +205,11 @@ class Command(object):
         self._title = title
         self._command_func = func
         self._help_footer = help_footer
+        self._positional_list = arguments or []
 
         self._parent = None
         self._option_list = []
         self._command_list = []
-        self._positional_list = []
 
         self._results = {}
         self._args_results = []
@@ -372,7 +376,7 @@ class Command(object):
 
     def action(self, command):
         """
-        Add a subcommand.
+        Add a subcommand. (Alias `subcommand`).
 
         :param command: a function or a Command
 
@@ -447,6 +451,10 @@ class Command(object):
                     option.default = value
 
                 cmd.option(option)
+            elif desc:
+                # if has description, it is a required option
+                name = name or '-%s, --%s <%s>' % (arg[0], arg, arg)
+                cmd.option(name, desc)
             else:
                 # positional arguments
                 cmd._positional_list.append(arg)

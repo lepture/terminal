@@ -135,7 +135,7 @@ class TestCommand(object):
         program = Command('action')
 
         @program.action
-        def lepture(bar=None, color=True, force=False, msg='hello'):
+        def lepture(bar, color=True, force=False, msg='hello'):
             """
             description of lepture subcommand.
 
@@ -217,3 +217,9 @@ class TestCommand(object):
 
         program._command_func = func
         program.parse()
+
+    def test_arguments(self):
+        program = Command('arguments', arguments=['name', 'hello'])
+        program.print_help()
+        program.parse('arguments foo')
+        assert program.name == 'foo'
