@@ -125,23 +125,21 @@ class TestCommand(object):
         def hello(bar):
             """
             description of hello
-
-            :param bar: description of bar
-            :option bar: -a, --bar <name>
             """
             assert bar == 'baz'
 
-        program.parse('foo hello -a baz')
+        program.parse('foo hello baz')
 
     def test_action(self):
         program = Command('foo')
 
         @program.action
-        def lepture(bar, color=True, force=False, msg='hello'):
+        def lepture(bar=None, color=True, force=False, msg='hello'):
             """
             description of lepture subcommand.
 
             :param bar: description of bar
+            :option bar: --bar [name]
             """
             assert bar == 'lepture'
 

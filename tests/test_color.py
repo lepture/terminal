@@ -74,16 +74,16 @@ class Environ(object):
         self.term = os.environ.get('TERM', None)
 
     def enable_256color(self):
-        os.environ['TERMINAL-TEST'] = 'true'
+        os.environ['TERMINAL-COLOR'] = 'true'
         os.environ['COLORTERM'] = 'true'
         os.environ['TERM'] = 'xterm-256color'
 
     def enable_color(self):
-        os.environ['TERMINAL-TEST'] = 'true'
+        os.environ['TERMINAL-COLOR'] = 'true'
         os.environ['TERM'] = 'xterm'
 
     def reset(self):
-        del os.environ['TERMINAL-TEST']
+        del os.environ['TERMINAL-COLOR']
         if 'COLORTERM' in os.environ:
             del os.environ['COLORTERM']
         if self.term:

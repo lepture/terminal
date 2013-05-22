@@ -10,7 +10,7 @@ def test_command():
 
     program.add_log_options()
     program.print_help()
-    program.parse('foo lepture --bar lepture')
+    program.parse('foo lepture lepture')
     program.parse('foo -v')
     program.parse('foo -q')
     program.print_title('hello')

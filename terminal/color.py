@@ -21,7 +21,7 @@ def is_color_supported():
     if not hasattr(sys.stdout, 'isatty'):
         return False
 
-    if not sys.stdout.isatty() and 'TERMINAL-TEST' not in os.environ:
+    if not sys.stdout.isatty() and 'TERMINAL-COLOR' not in os.environ:
         return False
 
     if sys.platform == 'win32':  # pragma: no cover
