@@ -205,6 +205,7 @@ class Command(object):
         self._parent = None
         self._option_list = []
         self._command_list = []
+        self._positional_list = []
 
         self._results = {}
         self._args_results = []
@@ -447,8 +448,8 @@ class Command(object):
 
                 cmd.option(option)
             else:
-                name = name or '-%s, --%s <%s>' % (arg[0], arg, arg)
-                cmd.option(name, desc)
+                # positional arguments
+                cmd._positional_list.append(arg)
 
         cmd._command_func = func
         self._command_list.append(cmd)
@@ -486,11 +487,17 @@ class Command(object):
                     command._parent = self
                     return command.parse(self._argv)
 
+        _positional_index = 0
         while self._argv:
             arg = self._argv[0]
             self._argv = self._argv[1:]
             if not self.parse_options(arg):
                 self._args_results.append(arg)
+                if len(self._positional_list) > _positional_index:
+                    # positional arguments
+                    key = self._positional_list[_positional_index]
+                    self._results[key] = arg
+                    _positional_index += 1
 
         # validate
         self.validate_options()
