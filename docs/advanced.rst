@@ -142,6 +142,32 @@ define the option yourself::
 .. _`commander.js`: https://github.com/visionmedia/commander.js
 
 
+The `arguments` paramter were added in 0.4.0, and it can be generated from a function::
+
+    @program.action
+    def install(target):
+        ""install a package"""
+        do_something(target)
+
+The usage will be::
+
+    $ pip install <target>
+
+If the `target` has a description, it will be q required option::
+
+    @program.action
+    def install(target):
+        """
+        install packages
+
+        :param target: Install packages into dir
+        """
+        do_something(target)
+
+The usage will be::
+
+    $ pip install -t <target>
+
 Options
 ~~~~~~~
 
