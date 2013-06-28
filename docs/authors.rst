@@ -9,7 +9,7 @@ Contributors
 
 People who send patches and suggestions:
 
-* reorx
+.. include:: ../AUTHORS
 
 Find more contributors on GitHub_.
 
