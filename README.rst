@@ -18,7 +18,7 @@ Features
 
 * An easy to use command parser
 * Full featured ANSI colors and styles
-* Full featured prompt communcation
+* Full featured prompt communication
 * Nested and verbose logging
 * No dependencies (windows need colorama)
 

@@ -1,5 +1,3 @@
-.. _quickstart:
-
 Quickstart
 ==========
 
@@ -7,11 +5,11 @@ Quickstart
 
 Eager to get started? This page gives a good introduction in how to get started
 with Terminal. This assumes you already have Terminal installed. If you do not,
-head over to the :ref:`Installation <install>` section.
+head over to the :doc:`install` section.
 
 First, make sure that:
 
-* Terminal is :ref:`installed <install>`
+* Terminal is :doc:`installed <install>`
 
 
 Let's get started with some simple examples.
@@ -40,7 +38,7 @@ Available styles::
     bold, faint, italic, underline, blink, overline, inverse
     conceal, strike
 
-.. admonition:: Note:
+.. warning::
 
     But don't count on these styles, your terminal may be not able to
     show all of them.
@@ -49,8 +47,8 @@ Available styles::
 Verbose logging
 ---------------
 
-Terminal programs need a simple and beatiful logging system. If it has a
-verbose feature, it could helps a lot::
+Terminal programs need a simple and beautiful logging system. If it has a
+verbose feature, it could help a lot::
 
     >>> from terminal import log
 
@@ -72,7 +70,7 @@ Prompt communication
 --------------------
 
 Many terminal programs will communicate with the users, this could be easy
-with :class:`prompt`.
+with :func:`prompt`.
 
 Let's create a prompt to ask the user's name::
 
@@ -84,20 +82,20 @@ We could set a default name for the user::
 
     username = terminal.prompt('what is your name', 'Kate')
 
-It is not a good idea to get a password with :class:`prompt`, instead,
-terminal provided a :class:`password` for you::
+It is not a good idea to get a password with :func:`prompt`, instead,
+terminal provided a :func:`password` for you::
 
     password = terminal.password('what is your password')
 
 Want more on prompt?
 
-We have :class:`terminal.confirm` and :class:`terminal.choose`.
+We have :func:`terminal.confirm` and :func:`terminal.choose`.
 
 
 Command line
 ------------
 
-This is a replacement of **argparse** (or optparse).
+This is a replacement for **argparse** (or optparse).
 
 Create a simple command parser with :class:`Command`::
 
@@ -115,7 +113,7 @@ Let's make it work::
     if program.output:
        print program.output
 
-Save the code in a file (for example: foo.py), play in the terminal::
+Save the code in a file (for example :file:`foo.py`), play in the terminal::
 
     $ python foo.py -h
     $ python foo.py -o src
@@ -123,7 +121,7 @@ Save the code in a file (for example: foo.py), play in the terminal::
     $ python foo.py --output src
 
 However, when creating a terminal tool, a subcommand is usually needed, we can
-add subcommands via :class:`Command.action`::
+add subcommands via :meth:`Command.action`::
 
     program = Command('foo', 'a description')
     program.option('-v, --verbose', 'show more logs')
@@ -146,4 +144,4 @@ Let's play with the more complex one::
 
 -----------------------------
 
-Ready for more? Check out the :ref:`advanced <advanced>` section.
+Ready for more? Check out the :doc:`advanced` section.

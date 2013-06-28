@@ -11,6 +11,6 @@ People who send patches and suggestions:
 
 * reorx
 
-Find more contributors on Github_.
+Find more contributors on GitHub_.
 
-.. _Github: https://github.com/lepture/terminal/contributors
+.. _GitHub: https://github.com/lepture/terminal/contributors

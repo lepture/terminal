@@ -1,5 +1,3 @@
-.. _advanced:
-
 Advanced Usage
 ==============
 
@@ -12,7 +10,7 @@ Colorful Life
 -------------
 
 If you are not satisfied with 8-bit colors, we can have more.
-The :class:`colorize` function can pain 256 colors if your terminal supports 256 colors::
+The :func:`colorize` function can paint 256 colors if your terminal supports 256 colors::
 
     >>> from terminal import colorize
     >>> print colorize('text', 'red')        # color name
@@ -25,16 +23,16 @@ The :class:`colorize` function can pain 256 colors if your terminal supports 256
     text
 
 
-.. admonition:: Note:
+.. note::
 
     If your terminal can not show 256 colors, maybe you should change your terminal
     profile, claim that it supports 256 colors.
 
-We can also paint the background of the text with colorize::
+We can also paint the background of the text with :func:`colorize`::
 
     >>> print colorize('text', 'ff0000', background=True)
 
-The source engine of :class:`colorize`, :class:`red`, :class:`cyan` and etc. is
+The source engine of :func:`colorize`, :func:`red`, :func:`cyan` and etc. is
 :class:`Color` object. Let's dig into it::
 
     >>> from terminal import Color
@@ -68,7 +66,7 @@ bold and underline styles, we could::
     >>> print s.red.green_bg.bold.underline
     text
 
-.. admonition:: Note:
+.. important::
 
     If you are colorizing non-ASCII charaters, and you are not on Python 3.
     Please do wrap the charaters with **u**::
@@ -80,7 +78,7 @@ Decorator Command
 -----------------
 
 :class:`Command` is inspired by `commander.js`_, with the magic power of Python,
-we can do better. Let's have a look at the basic usage of Command::
+we can do better. Let's have a look at the basic usage of :class:`Command`::
 
     from terminal import Command
 
@@ -142,7 +140,7 @@ define the option yourself::
 .. _`commander.js`: https://github.com/visionmedia/commander.js
 
 
-The `arguments` paramter were added in 0.4.0, and it can be generated from a function::
+The ``arguments`` parameter was added in 0.4.0, and it can be generated from a function::
 
     @program.action
     def install(target):
@@ -153,7 +151,7 @@ The usage will be::
 
     $ pip install <target>
 
-If the `target` has a description, it will be q required option::
+If the ``target`` has a description, it will be a required option::
 
     @program.action
     def install(target):
@@ -203,7 +201,7 @@ description.
 Builtin Engines
 ---------------
 
-We do like colorful things, but we are to lazy to do any customization. The default
+We do like colorful things, but we are too lazy to do any customization. The default
 one is pretty enough, (if you don't think so, let's improve it).
 
 .. image:: _static/terminal.png

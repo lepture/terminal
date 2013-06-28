@@ -1,10 +1,8 @@
-.. _api:
-
 Developer Interface
 ===================
 
 This part of the documentation covers the interface of terminal.
-Terminal only depends on the built-in battery, it is light weight.
+Terminal only depends on Python's built-in batteries, it is lightweight.
 
 .. module:: terminal
 

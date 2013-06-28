@@ -5,9 +5,9 @@ First, please do contribute! There are more than one way to contribute, and I wi
 appreciate any way you choose.
 
 * introduce Terminal to your friends, let Terminal to be known
-* discuss Terminal, and submit bugs with github issues
+* discuss Terminal, and submit bugs with GitHub issues
 * improve documentation for Terminal
-* send patch with github pull request
+* send patch with GitHub pull request
 
 English and Chinese issues are acceptable, talk in your favorite language.
 
@@ -39,7 +39,7 @@ cases for them.
 Here are some tips to make things simple:
 
 * When you cloned this repo, run ``make``, it will prepare everything for you
-* Check the code style with ``make link``
+* Check the code style with ``make lint``
 * Check the test cases with ``make test``
 * Check test coverage with ``make coverage``
 
