@@ -144,7 +144,7 @@ The ``arguments`` parameter was added in 0.4.0, and it can be generated from a f
 
     @program.action
     def install(target):
-        ""install a package"""
+        """install a package"""
         do_something(target)
 
 The usage will be::
