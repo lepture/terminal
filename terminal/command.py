@@ -403,7 +403,7 @@ class Command(object):
 
         if isinstance(command, Command):
             self._command_list.append(command)
-            return self
+            return command
 
         # it is a function
         func = command
@@ -467,7 +467,7 @@ class Command(object):
 
         cmd._command_func = func
         self._command_list.append(cmd)
-        return self
+        return command
 
     def subcommand(self, command):
         """Alias for Command.action."""
@@ -490,7 +490,8 @@ class Command(object):
             self.validate_options()
             if self._command_func:
                 self._command_func(**self._results)
-            return self
+                return True
+            return False
 
         cmd = self._argv[0]
 
@@ -521,7 +522,8 @@ class Command(object):
 
         if self._command_func:
             self._command_func(**self._results)
-        return self
+            return True
+        return False
 
     def print_version(self):
         """
