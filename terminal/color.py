@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+    terminal.color
+    ~~~~~~~~~~~~~~
+
+    ANSI color control for terminal.
+
+    :copyright: (c) 2013 by Hsiaoming Yang.
+"""
 
 # http://en.wikipedia.org/wiki/ANSI_escape_code
 # http://en.wikipedia.org/wiki/Web_colors
@@ -12,7 +20,7 @@ if sys.version_info[0] == 3:
     string_type = str
     unicode = str
 else:
-    string_type = basestring
+    string_type = (unicode, str)
 
 
 def is_color_supported():

@@ -2,7 +2,12 @@
 # flake8: noqa
 
 """
-A terminal environment tools.
+    terminal
+    ~~~~~~~~
+
+    A terminal environment tools.
+
+    :copyright: (c) 2013 by Hsiaoming Yang.
 """
 
 from __future__ import absolute_import
@@ -16,4 +21,4 @@ log = Logger()
 
 __homepage__ = 'https://github.com/lepture/terminal'
 __author__ = 'Hsiaoming Yang <me@lepture.com>'
-__version__ = '0.3.0'
+__version__ = '0.4.0'

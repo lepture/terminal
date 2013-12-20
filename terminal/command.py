@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+    terminal.command
+    ~~~~~~~~~~~~~~~~
+
+    Command and option parser for terminal.
+
+    :copyright: (c) 2013 by Hsiaoming Yang.
+"""
 
 import re
 import sys

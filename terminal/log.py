@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+    terminal.log
+    ~~~~~~~~~~~~
 
-from __future__ import absolute_import
+    Verbose logger support for terminal.
+
+    :copyright: (c) 2013 by Hsiaoming Yang.
+"""
+
 import sys
 import copy
 

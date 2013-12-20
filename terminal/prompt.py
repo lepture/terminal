@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+    terminal.prompt
+    ~~~~~~~~~~~~~~~
+
+    Prompt support on terminal.
+
+    :copyright: (c) 2013 by Hsiaoming Yang.
+"""
 
 import getpass
 import sys
@@ -7,7 +15,7 @@ import sys
 if sys.version_info[0] == 3:
     string_type = str
 else:
-    string_type = basestring
+    string_type = (unicode, str)
 
 
 def prompt(name, default=None):
