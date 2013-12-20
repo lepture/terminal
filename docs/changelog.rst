@@ -9,10 +9,11 @@ Here you can see the full list of changes between each Terminal release.
 Version 0.4.0
 -------------
 
-Release date to be decided.
+Release on Dec 20, 2013. Beta release.
 
 * Add alias :meth:`Command.subcommand`
 * Add `arguments` parameter for :class:`Command`
+* Reture False and True for :meth:`Command.parse`
 
 Version 0.3.0
 -------------
